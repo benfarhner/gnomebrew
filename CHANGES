@@ -1,0 +1,55 @@
+Project Gnome Changelog
+
+2013-09-03
+
+* game.h, game.cpp: created
+
+* main.cpp: modified to use new Game class, greatly reduced code
+
+* menu.h, menu.cpp: created
+
+* menuitem.h, menuitem.cpp: created
+
+* gametime.h, gametime.cpp: created
+
+
+
+2013-09-02
+
+* world.h, world.cpp: renamed class World and renamed files appropriately
+(getSymbol): renamed from getTileSymbol, uses GameObject::Symbol()
+(World): initializes tiles on map with default objects
+
+* gameobject.h, gameobject.cpp: added coordinate properties, rewrote accessors and
+mutators, changed default property values
+(Update): created
+
+* being.cpp: added default description
+
+* tile.h, tile.cpp (getDescriptions): renamed from getDescription, now returns list of
+descriptions and uses GameObject::Description()
+(getSymbol): now uses GameObject::Symbol()
+(addObject, Tile(const Tile&), operator=): created
+
+* world.h, world.cpp 
+
+* main.cpp: updated #includes, rewrote tile description fetching, now (crudely) clears
+description lines before printing
+
+* dirt.h, dirt.cpp: created
+
+* stone.h, stone.cpp: created
+
+
+
+2013-09-01
+
+* main.cpp: created
+
+* map.h, map.cpp: created
+
+* tile.h, tile.cpp: created
+
+* gameobject.h, gameobject.cpp: created
+
+* being.h, being.cpp: created
