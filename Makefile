@@ -5,7 +5,7 @@ EXECUTABLE=gnomebrew
 all: $(EXECUTABLE)
 
 $(EXECUTABLE):
-    $(CC) $(CFLAGS) *.cpp -o $(EXECUTABLE)
+	$(CC) $(CFLAGS) *.cpp -o $(EXECUTABLE)
 
 clean:
-    rm -rf gnomebrew
+	rm -rf gnomebrew
