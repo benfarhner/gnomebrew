@@ -17,16 +17,21 @@ class MenuItem
 	public:
 		// Constructors
 		MenuItem();
-		MenuItem(string);
+		MenuItem(string, bool enabled = true);
 		MenuItem(const MenuItem&);
 		~MenuItem();
 		
 		// Accessors
 		string getText();
+		bool isEnabled();
+		
+		// Mutators
+		void enable(bool enabled = true);
 		
 	private:
 		// Private Properties
 		string _text;
+		bool _enabled;
 };
 
 #endif

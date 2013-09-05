@@ -16,14 +16,14 @@ using namespace std;
 
 #include "menuitem.h"
 
-class Game;
+class GameManager;
 
 class Menu
 {
 public:
     // Constructors
-    Menu(Game*);
-    Menu(Game*, list<MenuItem>);
+    Menu(GameManager*);
+    Menu(GameManager*, list<MenuItem>);
 	Menu(const Menu&);
     ~Menu();
     
@@ -37,14 +37,17 @@ private:
     // Private Member Functions
     void handleInput();
     void render();
+    void selectNext();
+    void selectPrevious();
+    void selectFirst();
     
     // Private Properties
-    Game* _owner;
+    GameManager* _owner;
     WINDOW* _menu;
     list<MenuItem> _items;
     list<MenuItem>::iterator _selected;
 };
 
-#include "game.h"
+#include "gamemanager.h"
 
 #endif

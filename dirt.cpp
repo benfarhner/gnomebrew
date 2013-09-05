@@ -14,6 +14,6 @@ Implementation of the Dirt class
 
 Dirt::Dirt()
 {
-    symbol = '.';
+    symbol = ' ';
     description = "Dirt";
 }

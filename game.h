@@ -12,45 +12,35 @@ Manager class to handle the whole game
 #include <curses.h>
 #include <list>
 #include <string>
+#include <unistd.h>
 using namespace std;
 
 #include "gametime.h"
-#include "menu.h"
-#include "menuitem.h"
 #include "world.h"
 
 class Game
 {
-public:
-    // Constructors
-    Game();
-    ~Game();
+    public:
+        // Constructors
+        Game();
+        ~Game();
     
-    // Accessors
-    bool isRunning();
-    
-    // Member Functions
-    void update();
-	void handleMenuSelection(MenuItem);
+        // Member Functions
+        void update();
+        void handleInput(int);
 
-private:
-	// Private Member Functions
-    void handleInput();
-    void render();
-    void showMenu();
-	
-	// Private Properties
-    bool _isRunning;
-    bool _isMenuVisible;
+    private:
+        // Private Member Functions
+        void render();
     
-    World _world;
-    GameTime _time;
+        World* _world;
+        GameTime _time;
     
-    WINDOW* _window;
-    Menu* _menu;
-	
-	// Static Constants
-	static const int SECONDS_PER_UPDATE;
+        WINDOW* _description;
+        WINDOW* _footer;
+    
+        // Static Constants
+        static const int SECONDS_PER_UPDATE;
 };
 
 #endif

@@ -12,6 +12,9 @@ Note that the Tiles are stored [row][col], or [y][x]
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <curses.h>
+#include <cstdlib>
+#include <ctime>
 #include <vector>
 using namespace std;
 
@@ -23,11 +26,17 @@ using namespace std;
 class World
 {    
     public:
+        // Constructors
         World();
+        World(int, int);
         ~World();
         
+        // Accessors
         int getWidth();
         int getHeight();
+        
+        Tile getTile(int, int);
+        char getSymbol(int, int);
         
         int getCharX();
         int getCharY();
@@ -37,18 +46,19 @@ class World
         void moveCharUp();
         void moveCharDown();
         
-        Tile getTile(int, int);
-        char getSymbol(int, int);
+        WINDOW* render();
     
     private:
-        int width;
-        int height;
-        int charX;
-        int charY;
+        // Private Member Functions
+        void generateWorld();
         
-        vector< vector<Tile> > * tiles;
+        int _width;
+        int _height;
         
-        Being * player;
+        vector< vector<Tile> >* _tiles;
+        WINDOW* _map;
+        
+        Being* _player;
 };
 
 #endif

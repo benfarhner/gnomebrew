@@ -14,6 +14,6 @@ Implementation of the Stone class
 
 Stone::Stone()
 {
-    symbol = '#';
+    symbol = '.';
     description = "Stone";
 }
