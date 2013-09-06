@@ -168,7 +168,6 @@ WINDOW* World::render()
         }
     }
     
-    touchwin(_map);
     return _map;
 #endif
 }

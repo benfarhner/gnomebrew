@@ -86,7 +86,7 @@ void Game::render()
     /// Render world tiles
     
     WINDOW* map = _world->render();
-    int mapHeight = LINES - 2;
+    int mapHeight = LINES - 3;
     int mapWidth = COLS - 23;
     int mapRow = _world->getCharY() - (mapHeight / 2);
     int mapCol = _world->getCharX() - (mapWidth / 2);
@@ -95,18 +95,18 @@ void Game::render()
     {
         mapRow = 0;
     }
-    if (mapRow + mapHeight > _world->getHeight())
+    if (mapRow + mapHeight >= _world->getHeight())
     {
-        mapRow = _world->getHeight() - mapHeight;
+        mapRow = _world->getHeight() - mapHeight - 1;
     }
     
     if (mapCol < 0)
     {
         mapCol = 0;
     }
-    if (mapCol + mapWidth > _world->getWidth())
+    if (mapCol + mapWidth >= _world->getWidth())
     {
-        mapCol = _world->getWidth() - mapWidth;
+        mapCol = _world->getWidth() - mapWidth - 1;
     }
     
     pnoutrefresh(map, mapRow, mapCol, 0, 0, mapHeight, mapWidth);
@@ -118,7 +118,7 @@ void Game::render()
     list<string>::iterator it;
     int index = 0;
     
-    wclear(_description);
+    werase(_description);
     
     for (it = descriptions.begin(); it != descriptions.end(); ++it)
     {
