@@ -8,13 +8,11 @@ Implementation of the Game class
 
 #include "game.h"
 
-
-
 /*
  * Static Constants
  */
 
-const int Game::SECONDS_PER_UPDATE = 1;
+const int Game::SECONDS_PER_UPDATE = 3600;
 
 /*
  * Constructors
@@ -22,16 +20,22 @@ const int Game::SECONDS_PER_UPDATE = 1;
 
 Game::Game()
 {
+    _time.setHours(6); // 6:00am
+    
+#ifndef DEBUG
     _description = newwin(LINES - 2, 20, 0, COLS - 20);
     _footer = newwin(2, COLS, LINES - 2, 0);
+#endif
     
     _world = new World(200, 100);
 }
 
 Game::~Game()
 {
+#ifndef DEBUG
     delwin(_description);
     delwin(_footer);
+#endif
     
     delete _world;
 }
@@ -42,6 +46,7 @@ Game::~Game()
 
 void Game::update()
 {
+    _world->update(SECONDS_PER_UPDATE);
     render();
     
     // Run at about 60 "frames" per second
@@ -77,7 +82,8 @@ void Game::handleInput(int input)
 
 void Game::render()
 {
-    /* Render world tiles */
+#ifndef DEBUG
+    /// Render world tiles
     
     WINDOW* map = _world->render();
     int mapHeight = LINES - 2;
@@ -105,10 +111,10 @@ void Game::render()
     
     pnoutrefresh(map, mapRow, mapCol, 0, 0, mapHeight, mapWidth);
     
-    /* Render current tile descriptions */
+    /// Render current tile descriptions
     
-    Tile currentTile = _world->getTile(_world->getCharY(), _world->getCharX());
-    list<string> descriptions(currentTile.getDescriptions());
+    Tile* currentTile = _world->getTile(_world->getCharY(), _world->getCharX());
+    list<string> descriptions = currentTile->getDescriptions();
     list<string>::iterator it;
     int index = 0;
     
@@ -122,7 +128,7 @@ void Game::render()
     
     wnoutrefresh(_description);
     
-    /* Render current game time */
+    /// Render current game time
     
     string time = " " + GameTime::toPaddedString(_time.getHours()) + ":" +
                   GameTime::toPaddedString(_time.getMinutes()) + " " +
@@ -141,4 +147,5 @@ void Game::render()
     
     // Push all updates to the screen
     doupdate();
+#endif
 }

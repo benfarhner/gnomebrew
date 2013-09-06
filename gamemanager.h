@@ -6,6 +6,8 @@ Manager class to oversee all window and input management.
 
 */
 
+//#define DEBUG 1
+
 #ifndef GAMEMANAGER_H
 #define GAMEMANAGER_H
 
@@ -46,7 +48,6 @@ class GameManager
         
         // Properties
         GameMode::Enum _mode;
-        
         Game* _game;
         Menu* _mainMenu;
         Menu* _pauseMenu;

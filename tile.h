@@ -19,19 +19,26 @@ using namespace std;
 class Tile
 {
     public:
+        // Constructors
         Tile();
         Tile(const Tile&);
         ~Tile();
         
-        Tile& operator= (const Tile&);
+        // Operators
+        Tile& operator=(const Tile&);
         
-        void addObject(GameObject);
-        
+        // Accessors
         char getSymbol();
         list<string> getDescriptions();
+        
+        // Mutators
+        void addObject(GameObject*);
+        
+        // Member Functions
+        void update(int seconds = 0);
 
     private:
-        list<GameObject> * objects;
+        list<GameObject*>* _objects;
 };
 
 #endif

@@ -18,6 +18,10 @@ class GameTime
 	public:
 		// Constructors
 		GameTime();
+		GameTime(const GameTime&);
+		
+		// Operators
+		GameTime& operator=(const GameTime&);
 		
 		// Accessors
 		int getYear();
@@ -43,6 +47,9 @@ class GameTime
 		void addHour(int hour = 1);
 		void addMinute(int minute = 1);
 		void addSecond(int second = 1);
+		
+		// Member Functions
+		void reset();
     
         // Static Functions
         static string toPaddedString(int, int length = 2);

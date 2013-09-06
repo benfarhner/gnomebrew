@@ -9,7 +9,7 @@ Represents wild Grass.
 #ifndef GRASS_H
 #define GRASS_H
 
-#include <sstream>
+#include <map>
 using namespace std;
 
 #include "gameobject.h"
@@ -17,8 +17,10 @@ using namespace std;
 class Grass: public GameObject
 {
     public:
+        // Constructors
         Grass();
         
+        // Member Functions
         void update(int seconds = 0);
     
     private:

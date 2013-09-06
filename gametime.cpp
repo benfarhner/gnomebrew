@@ -8,8 +8,6 @@ Implementation of the GameTime class
 
 #include "gametime.h"
 
-
-
 /*
  * Static Constants
  */
@@ -34,37 +32,38 @@ const int GameTime::SECONDS_MAX = 59;
 const int GameTime::SECONDS_PER_MINUTE = 60;
 
 /*
- * Static Functions
- */
-
-string GameTime::toPaddedString(int i, int length)
-{
-    stringstream ss;
-    ss << i;
-    string s = ss.str();
-    
-    while (s.length() < length)
-    {
-        s = "0" + s;
-    }
-    
-    return s;
-}
-
-/*
  * Constructors
  */
 
 GameTime::GameTime()
 {
-	// Initialize default time to 6:00am on the first day of Year Zero
-	_year = 0;
-	_season = SEASON_MIN;
-	_month = MONTH_MIN;
-	_day = DAY_MIN;
-	_hours = 6;
-	_minutes = MINUTES_MIN;
-	_seconds = SECONDS_MIN;
+	reset();
+}
+
+GameTime::GameTime(const GameTime& other)
+{
+    _year = other._year;
+    _season = other._season;
+    _month = other._month;
+    _day = other._day;
+    _hours = other._hours;
+    _minutes = other._minutes;
+    _seconds = other._seconds;
+}
+
+/*
+ * Operators
+ */
+
+GameTime& GameTime::operator=(const GameTime& other)
+{
+    _year = other._year;
+    _season = other._season;
+    _month = other._month;
+    _day = other._day;
+    _hours = other._hours;
+    _minutes = other._minutes;
+    _seconds = other._seconds;
 }
 
 /*
@@ -318,4 +317,37 @@ void GameTime::addSecond(int second)
 		addMinute(1);
 		_seconds -= SECONDS_PER_MINUTE;
 	}
+}
+
+/*
+ * Member Functions
+ */
+
+void GameTime::reset()
+{
+	_year = 0;
+	_season = SEASON_MIN;
+	_month = MONTH_MIN;
+	_day = DAY_MIN;
+	_hours = HOURS_MIN;
+	_minutes = MINUTES_MIN;
+	_seconds = SECONDS_MIN;
+}
+
+/*
+ * Static Functions
+ */
+
+string GameTime::toPaddedString(int i, int length)
+{
+    stringstream ss;
+    ss << i;
+    string s = ss.str();
+    
+    while (s.length() < length)
+    {
+        s = "0" + s;
+    }
+    
+    return s;
 }

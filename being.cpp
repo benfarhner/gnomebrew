@@ -8,10 +8,21 @@ Implementation of the Being class
 
 #include "being.h"
 
+/*
+ * Constructors
+ */
+
 Being::Being()
 {
-    symbol = '@';
-    description = "A living creature";
+    _symbol = '@';
+    _description = "A living creature";
 }
 
-void Being::Update(int hours) { }
+/*
+ * Member Functions
+ */
+
+void Being::update(int seconds)
+{
+    GameObject::update(seconds);
+}

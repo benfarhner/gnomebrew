@@ -14,9 +14,11 @@ Represents a generic Being in the game
 class Being: public GameObject
 {
     public:
+        // Constructors
         Being();
         
-        void Update(int hours = 0);
+        // Member Functions
+        virtual void update(int seconds = 0);
     
     private:
 };

@@ -14,8 +14,12 @@ Represents a stone tile.
 class Stone: public GameObject
 {
     public:
+        // Constructors
         Stone();
-    
+        
+        // Member Functions
+        virtual void update(int seconds = 0);
+        
     private:
 };
 

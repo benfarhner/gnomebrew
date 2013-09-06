@@ -14,8 +14,8 @@ Implementation of the Grass class
 
 Grass::Grass()
 {
-    symbol = 'w';
-    description = "Grass";
+    _symbol = ',';
+    _description = "Grass Seedling";
 }
 
 /*
@@ -24,18 +24,26 @@ Grass::Grass()
 
 void Grass::update(int seconds)
 {
-    if (seconds > 0)
+    GameObject::update(seconds);
+    
+    if (_age.getMonth() >= 9)
     {
-        _age += seconds;
-        
-        if (_age >= 60 * 60 * 24 * 10)
-        {
-            symbol = 'W';
-        }
-        
-        if (_age >= 60 * 60 * 24 * 20)
-        {
-            symbol = '_';
-        }
+        _symbol = '_';
+        _description = "Dead Grass";
+    }
+    else if (_age.getMonth() >= 6)
+    {
+        _symbol = 'W';
+        _description = "Ripe Grass";
+    }
+    else if (_age.getMonth() >= 3)
+    {
+        _symbol = 'w';
+        _description = "Young Grass";
+    }
+    else
+    {
+        _symbol = ',';
+        _description = "Grass Seedling";
     }
 }

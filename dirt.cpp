@@ -14,6 +14,15 @@ Implementation of the Dirt class
 
 Dirt::Dirt()
 {
-    symbol = ' ';
-    description = "Dirt";
+    _symbol = ' ';
+    _description = "Dirt";
+}
+
+/*
+ * Member Functions
+ */
+
+void Dirt::update(int seconds)
+{
+    GameObject::update(seconds);
 }

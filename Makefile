@@ -2,9 +2,7 @@ CC=g++
 CFLAGS=-lncurses
 EXECUTABLE=gnomebrew
 
-all: $(EXECUTABLE)
-
-$(EXECUTABLE):
+all:
 	$(CC) $(CFLAGS) *.cpp -o $(EXECUTABLE)
 
 clean:

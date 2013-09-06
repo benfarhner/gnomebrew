@@ -8,8 +8,6 @@ Implementation of the Menu class
 
 #include "menu.h"
 
-
-
 /*
  * Constructors
  */
@@ -19,29 +17,51 @@ Menu::Menu(GameManager* owner)
     _owner = owner;
     selectFirst();
     
+#ifndef DEBUG
     // Initialize menu
     _menu = newwin(_items.size() + 4, COLS / 4, 5, COLS / 8 * 3);
     keypad(_menu, true);
     box(_menu, 0, 0);
+#endif
 }
 
 Menu::Menu(GameManager* owner, list<MenuItem> items)
 {
     _owner = owner;
     
-    setItems(items);
+    _items = items;
+    selectFirst();
+    
+#ifndef DEBUG
+    // Initialize menu
+    _menu = newwin(_items.size() + 4, COLS / 4, 5, COLS / 8 * 3);
+    keypad(_menu, true);
+    wattron(_menu, COLOR_PAIR(COLOR_PAIR_NORMAL));
+    box(_menu, 0, 0);
+#endif
 }
 
 Menu::Menu(const Menu& other)
 {
     _owner = other._owner;
     
-	setItems(other._items);
+    _items = other._items;
+    selectFirst();
+    
+#ifndef DEBUG
+    // Initialize menu
+    _menu = newwin(_items.size() + 4, COLS / 4, 5, COLS / 8 * 3);
+    keypad(_menu, true);
+    wattron(_menu, COLOR_PAIR(COLOR_PAIR_NORMAL));
+    box(_menu, 0, 0);
+#endif
 }
 
 Menu::~Menu()
 {
+#ifndef DEBUG
     delwin(_menu);
+#endif
 }
 
 /*
@@ -50,15 +70,6 @@ Menu::~Menu()
 
 void Menu::setItems(list<MenuItem> items)
 {
-    _items = items;
-    selectFirst();
-    
-    // Initialize menu
-    delwin(_menu);
-    _menu = newwin(_items.size() + 4, COLS / 4, 5, COLS / 8 * 3);
-    keypad(_menu, true);
-    wattron(_menu, COLOR_PAIR(COLOR_PAIR_NORMAL));
-    box(_menu, 0, 0);
 }
 
 /*
@@ -77,6 +88,7 @@ void Menu::update()
 
 void Menu::handleInput()
 {
+#ifndef DEBUG
     int input = wgetch(_menu);
     
     switch (input)
@@ -95,10 +107,12 @@ void Menu::handleInput()
             _owner->handleMenuSelection(*_selected);
             break;
     }
+#endif
 }
 
 void Menu::render()
 {
+#ifndef DEBUG
     int row = 2, y, col;
     
     wattron(_menu, A_BOLD);
@@ -129,6 +143,7 @@ void Menu::render()
     
     touchwin(_menu);
     wrefresh(_menu);
+#endif
 }
 
 void Menu::selectNext()

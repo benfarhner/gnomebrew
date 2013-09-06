@@ -9,6 +9,8 @@ Note that the Tiles are stored [row][col], or [y][x]
 
 */
 
+//#define DEBUG 1
+
 #ifndef WORLD_H
 #define WORLD_H
 
@@ -20,6 +22,7 @@ using namespace std;
 
 #include "tile.h"
 #include "dirt.h"
+#include "grass.h"
 #include "stone.h"
 #include "being.h"
 
@@ -34,9 +37,8 @@ class World
         // Accessors
         int getWidth();
         int getHeight();
-        
-        Tile getTile(int, int);
         char getSymbol(int, int);
+        Tile* getTile(int, int);
         
         int getCharX();
         int getCharY();
@@ -46,12 +48,15 @@ class World
         void moveCharUp();
         void moveCharDown();
         
+        // Member Functions
+        void update(int seconds = 0);
         WINDOW* render();
     
     private:
         // Private Member Functions
         void generateWorld();
         
+        // Properties
         int _width;
         int _height;
         

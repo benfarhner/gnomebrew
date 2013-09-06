@@ -14,6 +14,15 @@ Implementation of the Stone class
 
 Stone::Stone()
 {
-    symbol = '.';
-    description = "Stone";
+    _symbol = '.';
+    _description = "Stone";
+}
+
+/*
+ * Member Functions
+ */
+
+void Stone::update(int seconds)
+{
+    GameObject::update(seconds);
 }

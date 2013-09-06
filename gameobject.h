@@ -12,31 +12,43 @@ Represents a generic game object.
 #include <string>
 using namespace std;
 
-class GameObject
+#include "updatable.h"
+#include "gametime.h"
+
+class GameObject: public Updatable
 {
     public:
         // Constructors
         GameObject();
+        GameObject(const GameObject&);
+        
+        // Operators
+        GameObject& operator=(const GameObject&);
         
         // Accessors
-        int X();
-        int Y();
-        char Symbol();
-        string Description();
+        int getX();
+        int getY();
+        char getSymbol();
+        string getDescription();
+        GameTime getAge();
         
         // Mutators
-        void X(int);
-        void Y(int);
-        void Symbol(char);
-        void Description(string);
+        void setX(int);
+        void setY(int);
+        void setSymbol(char);
+        void setDescription(string);
+        void setAge(GameTime);
         
-        virtual void Update(int hours = 0);
+        // Member Functions
+        virtual void update(int seconds = 0);
     
     protected:
-        int x;
-        int y;
-        char symbol;
-        string description;
+        // Properties
+        int _x;
+        int _y;
+        char _symbol;
+        string _description;
+        GameTime _age;
 };
 
 #endif

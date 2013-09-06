@@ -14,17 +14,34 @@ Implementation of the Tile class
 
 Tile::Tile()
 {
-    objects = new list<GameObject>;
+    _objects = new list<GameObject*>;
 }
 
 Tile::Tile(const Tile& other)
 {
-    objects = new list<GameObject>(*(other.objects));
+    // Copy each object from the other list
+    _objects = new list<GameObject*>;
+    
+    for (list<GameObject*>::iterator it = other._objects->begin();
+         it != other._objects->end();
+         ++it)
+    {
+        GameObject* object;
+        *object = **it;
+        _objects->push_front(object);
+    }
 }
 
 Tile::~Tile()
 {
-    delete objects;
+    // Manually delete each object
+    while (!_objects->empty())
+    {
+        delete _objects->front();
+        _objects->pop_front();
+    }
+    
+    delete _objects;
 }
 
 /*
@@ -33,25 +50,35 @@ Tile::~Tile()
 
 Tile& Tile::operator= (const Tile& other)
 {
-    delete objects;
-    objects = new list<GameObject>(*(other.objects));
+    if (this == &other)
+    {
+        return *this;
+    }
+    
+    // Copy each object from the other list
+    _objects->clear();
+    
+    for (list<GameObject*>::iterator it = other._objects->begin();
+         it != other._objects->end();
+         ++it)
+    {
+        GameObject* object;
+        *object = **it;
+        _objects->push_front(object);
+    }
+    
     return *this;
 }
 
 /*
- * Functions
+ * Accessors
  */
-
-void Tile::addObject(GameObject object)
-{
-    objects->push_front(object);
-}
 
 char Tile::getSymbol()
 {
-    if (objects->size() > 0)
+    if (_objects->size() > 0)
     {
-        return objects->front().Symbol();
+        return _objects->front()->getSymbol();
     }
     else
     {
@@ -63,13 +90,13 @@ list<string> Tile::getDescriptions()
 {
     list<string> descriptions;
     
-    if (objects->size() > 0)
+    if (_objects->size() > 0)
     {
-        list<GameObject>::iterator it;
-        
-        for(it = objects->begin(); it != objects->end(); ++it)
+        for (list<GameObject*>::iterator it = _objects->begin();
+             it != _objects->end();
+             ++it)
         {
-            descriptions.push_back(it->Description());
+            descriptions.push_back((*it)->getDescription());
         }
     }
     else
@@ -78,4 +105,28 @@ list<string> Tile::getDescriptions()
     }
     
     return descriptions;
+}
+
+/*
+ * Mutators
+ */
+
+void Tile::addObject(GameObject* object)
+{
+    _objects->push_front(object);
+}
+
+/*
+ * Member Functions
+ */
+
+void Tile::update(int seconds)
+{
+    // Update all objects on the Tile
+    for (list<GameObject*>::iterator it = _objects->begin();
+         it != _objects->end();
+         ++it)
+    {
+        (*it)->update(seconds);
+    }
 }

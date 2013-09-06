@@ -8,8 +8,6 @@ Implementation of the GameManager class
 
 #include "gamemanager.h"
 
-
-
 /*
  * Constructors
  */
@@ -36,11 +34,13 @@ GameManager::GameManager()
     items.push_back(MenuItem("Quit"));
 	_pauseMenu = new Menu(this, items);
 	
+#ifndef DEBUG
 	// Initialize game color pairs
     init_pair(COLOR_PAIR_NORMAL, COLOR_WHITE, COLOR_BLACK);
     
     keypad(stdscr, true);
     nodelay(stdscr, true);
+#endif
 }
 
 GameManager::GameManager(const GameManager& other)
@@ -117,6 +117,7 @@ void GameManager::handleMenuSelection(MenuItem selection)
 
 void GameManager::handleInput()
 {
+#ifndef DEBUG
     int input = getch();
     
     if (input != ERR)
@@ -130,4 +131,5 @@ void GameManager::handleInput()
             _game->handleInput(input);
         }
     }
+#endif
 }

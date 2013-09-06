@@ -6,6 +6,8 @@ Manager class to handle the whole game
 
 */
 
+//#define DEBUG 1
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -32,7 +34,8 @@ class Game
     private:
         // Private Member Functions
         void render();
-    
+        
+        // Properties
         World* _world;
         GameTime _time;
     

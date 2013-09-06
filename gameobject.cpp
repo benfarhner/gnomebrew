@@ -14,58 +14,98 @@ Implementation of the GameObject class
 
 GameObject::GameObject()
 {
-    symbol = ' ';
-    description = "";
+    _x = 0;
+    _y = 0;
+    _symbol = ' ';
+    _description = "";
+    _age.reset();
+}
+
+GameObject::GameObject(const GameObject& other)
+{
+    _x = other._x;
+    _y = other._y;
+    _symbol = other._symbol;
+    _description = other._description;
+    _age = other._age;
+}
+
+/*
+ * Operators
+ */
+
+GameObject& GameObject::operator=(const GameObject& other)
+{
+    _x = other._x;
+    _y = other._y;
+    _symbol = other._symbol;
+    _description = other._description;
+    _age = other._age;
 }
 
 /*
  * Accessors
  */
 
-int GameObject::X()
+int GameObject::getX()
 {
-    return x;
+    return _x;
 }
 
-int GameObject::Y()
+int GameObject::getY()
 {
-    return y;
+    return _y;
 }
 
-char GameObject::Symbol()
+char GameObject::getSymbol()
 {
-    return symbol;
+    return _symbol;
 }
 
-string GameObject::Description()
+string GameObject::getDescription()
 {
-    return description;
+    return _description;
+}
+
+GameTime GameObject::getAge()
+{
+    return _age;
 }
 
 /*
  * Mutators
  */
 
-void GameObject::X(int _x)
+void GameObject::setX(int x)
 {
-    x = _x;
+    _x = x;
 }
 
-void GameObject::Y(int _y)
+void GameObject::setY(int y)
 {
-    y = _y;
+    _y = y;
 }
 
-void GameObject::Symbol(char _symbol)
+void GameObject::setSymbol(char symbol)
 {
-    symbol = _symbol;
+    _symbol = symbol;
 }
 
-void GameObject::Description(string _description)
+void GameObject::setDescription(string description)
 {
-    description = _description;
+    _description = description;
 }
 
+void GameObject::setAge(GameTime age)
+{
+    _age = age;
+}
 
+/*
+ * Member Functions
+ */
 
-void GameObject::Update(int hours) { }
+void GameObject::update(int seconds)
+{
+    _age.addSecond(seconds);
+}

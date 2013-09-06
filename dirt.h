@@ -14,7 +14,11 @@ Represents a basic dirt floor tile.
 class Dirt: public GameObject
 {
     public:
+        // Constructors
         Dirt();
+        
+        // Member Functions
+        virtual void update(int seconds = 0);
     
     private:
 };
