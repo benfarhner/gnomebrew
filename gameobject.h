@@ -40,7 +40,16 @@ class GameObject: public Updatable
         void setAge(GameTime);
         
         // Member Functions
+        virtual GameObject* harvest();
         virtual void update(int seconds = 0);
+        
+        enum Direction
+        {
+            DirectionNorth,
+            DirectionSouth,
+            DirectionEast,
+            DirectionWest
+        };
     
     protected:
         // Properties

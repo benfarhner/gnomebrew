@@ -21,7 +21,8 @@ class Grass: public GameObject
         Grass();
         
         // Member Functions
-        void update(int seconds = 0);
+        virtual GameObject* harvest();
+        virtual void update(int seconds = 0);
     
     private:
 };

@@ -120,6 +120,20 @@ void Tile::addObject(GameObject* object)
  * Member Functions
  */
 
+GameObject* Tile::harvest()
+{
+    GameObject* crop = _objects->front()->harvest();
+    
+    if (crop != 0)
+    {
+        delete _objects->front();
+        _objects->pop_front();
+        return crop;
+    }
+    
+    return 0;
+}
+
 void Tile::update(int seconds)
 {
     // Update all objects on the Tile

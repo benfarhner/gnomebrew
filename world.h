@@ -40,15 +40,8 @@ class World
         char getSymbol(int, int);
         Tile* getTile(int, int);
         
-        int getCharX();
-        int getCharY();
-        
-        void moveCharLeft();
-        void moveCharRight();
-        void moveCharUp();
-        void moveCharDown();
-        
         // Member Functions
+        GameObject* harvest(int, int);
         void update(int seconds = 0);
         WINDOW* render();
     
@@ -62,8 +55,6 @@ class World
         
         vector< vector<Tile> >* _tiles;
         WINDOW* _map;
-        
-        Being* _player;
 };
 
 #endif

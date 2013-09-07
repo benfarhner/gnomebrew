@@ -15,12 +15,23 @@ Implementation of the Grass class
 Grass::Grass()
 {
     _symbol = ',';
-    _description = "Grass Seedling";
+    _description = "Grass Seeds";
 }
 
 /*
  * Member Functions
  */
+
+GameObject* Grass::harvest()
+{
+    // Check for ripe grass
+    if (_age.getMonth() >= 6 && _age.getMonth() < 9)
+    {
+        return new Grass();
+    }
+    
+    return 0;
+}
 
 void Grass::update(int seconds)
 {
@@ -44,6 +55,6 @@ void Grass::update(int seconds)
     else
     {
         _symbol = ',';
-        _description = "Grass Seedling";
+        _description = "Grass Seeds";
     }
 }

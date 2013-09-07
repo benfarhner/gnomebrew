@@ -23,8 +23,6 @@ World::World()
     _map = newpad(_height, _width);
 #endif
     
-    _player = new Being();
-    
     generateWorld();
 }
 
@@ -37,8 +35,6 @@ World::World(int width, int height)
     _map = newpad(_height, _width);
 #endif
     
-    _player = new Being();
-    
     generateWorld();
 }
 
@@ -49,7 +45,6 @@ World::~World()
 #endif
 
     delete _tiles;
-    delete _player;
 }
 
 /*
@@ -71,14 +66,7 @@ char World::getSymbol(int row, int col)
     if (row >= 0 && row < _height &&
         col >= 0 && col < _width)
     {
-        if (row == _player->getY() && col == _player->getX())
-        {
-            return _player->getSymbol();
-        }
-        else
-        {
-            return _tiles->at(row).at(col).getSymbol();
-        }
+        return _tiles->at(row).at(col).getSymbol();
     }
 }
 
@@ -89,57 +77,24 @@ Tile* World::getTile(int row, int col)
     {
         return &(_tiles->at(row).at(col));
     }
-}
-
-int World::getCharX()
-{
-    return _player->getX();
-}
-
-int World::getCharY()
-{
-    return _player->getY();
-}
-
-/*
- * Mutators
- */
-
-void World::moveCharLeft()
-{
-    if (_player->getX() > 0)
-    {
-        _player->setX(_player->getX() - 1);
-    }
-}
-
-void World::moveCharRight()
-{
-    if (_player->getX() < _width - 1)
-    {
-        _player->setX(_player->getX() + 1);
-    }
-}
-
-void World::moveCharUp()
-{
-    if (_player->getY() > 0)
-    {
-        _player->setY(_player->getY() - 1);
-    }
-}
-
-void World::moveCharDown()
-{
-    if (_player->getY() < _height - 1)
-    {
-        _player->setY(_player->getY() + 1);
-    }
+    
+    return 0;
 }
 
 /*
  * Member Functions
  */
+
+GameObject* World::harvest(int row, int col)
+{
+    if (row >= 0 && row < _height &&
+        col >= 0 && col < _width)
+    {
+        return _tiles->at(row).at(col).harvest();
+    }
+    
+    return 0;
+}
 
 void World::update(int seconds)
 {

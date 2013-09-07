@@ -18,6 +18,7 @@ class Stone: public GameObject
         Stone();
         
         // Member Functions
+        virtual GameObject* harvest();
         virtual void update(int seconds = 0);
         
     private:

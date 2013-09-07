@@ -28,6 +28,7 @@ Game::Game()
 #endif
     
     _world = new World(200, 100);
+    _player = new Being();
 }
 
 Game::~Game()
@@ -38,6 +39,14 @@ Game::~Game()
 #endif
     
     delete _world;
+    delete _player;
+    
+    for (list<Recipe*>::iterator it = _recipes.begin();
+         it != _recipes.end();
+         ++it)
+    {
+        delete *it;
+    }
 }
 
 /*
@@ -65,17 +74,36 @@ void Game::handleInput(int input)
         switch (input)
         {
             case KEY_UP:
-                _world->moveCharUp();
+                if (_player->getY() > 0)
+                {
+                    _player->move(GameObject::DirectionNorth);
+                }
                 break;
             case KEY_DOWN:
-                _world->moveCharDown();
+                if (_player->getY() < _world->getHeight() - 1)
+                {
+                    _player->move(GameObject::DirectionSouth);
+                }
                 break;
             case KEY_LEFT:
-                _world->moveCharLeft();
+                if (_player->getX() > 0)
+                {
+                    _player->move(GameObject::DirectionWest);
+                }
                 break;
             case KEY_RIGHT:
-                _world->moveCharRight();
+                if (_player->getX() < _world->getWidth() - 1)
+                {
+                    _player->move(GameObject::DirectionEast);
+                }
                 break;
+            case 'h': // Harvest
+                GameObject* crop = _world->harvest(_player->getY(), _player->getX());
+                
+                if (crop != 0)
+                {
+                    _player->addObject(crop);
+                }
         }
     }
 }
@@ -88,8 +116,8 @@ void Game::render()
     WINDOW* map = _world->render();
     int mapHeight = LINES - 3;
     int mapWidth = COLS - 23;
-    int mapRow = _world->getCharY() - (mapHeight / 2);
-    int mapCol = _world->getCharX() - (mapWidth / 2);
+    int mapRow = _player->getY() - (mapHeight / 2);
+    int mapCol = _player->getX() - (mapWidth / 2);
     
     if (mapRow < 0)
     {
@@ -109,11 +137,14 @@ void Game::render()
         mapCol = _world->getWidth() - mapWidth - 1;
     }
     
+    // Render player on map
+    mvwaddch(map, _player->getY(), _player->getX(), _player->getSymbol());
+    
     pnoutrefresh(map, mapRow, mapCol, 0, 0, mapHeight, mapWidth);
     
     /// Render current tile descriptions
     
-    Tile* currentTile = _world->getTile(_world->getCharY(), _world->getCharX());
+    Tile* currentTile = _world->getTile(_player->getY(), _player->getX());
     list<string> descriptions = currentTile->getDescriptions();
     list<string>::iterator it;
     int index = 0;
@@ -122,8 +153,20 @@ void Game::render()
     
     for (it = descriptions.begin(); it != descriptions.end(); ++it)
     {
-        mvwprintw(_description, index, 0, it->c_str());
-        ++index;
+        mvwprintw(_description, index++, 0, it->c_str());
+    }
+    
+    // Render player inventory
+    mvwprintw(_description, ++index, 0, "Inventory");
+    mvwprintw(_description, ++index, 0, "=========");
+    
+    list<GameObject*>* inventory = _player->getInventory();
+    
+    for (list<GameObject*>::iterator it = inventory->begin();
+         it != inventory->end();
+         ++it)
+    {
+        mvwprintw(_description, ++index, 0, (*it)->getDescription().c_str());
     }
     
     wnoutrefresh(_description);

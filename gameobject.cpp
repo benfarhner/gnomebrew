@@ -105,6 +105,11 @@ void GameObject::setAge(GameTime age)
  * Member Functions
  */
 
+GameObject* GameObject::harvest()
+{
+    return 0;
+}
+
 void GameObject::update(int seconds)
 {
     _age.addSecond(seconds);

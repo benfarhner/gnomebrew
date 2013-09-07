@@ -35,6 +35,7 @@ class Tile
         void addObject(GameObject*);
         
         // Member Functions
+        GameObject* harvest();
         void update(int seconds = 0);
 
     private:

@@ -18,6 +18,7 @@ Manager class to handle the whole game
 using namespace std;
 
 #include "gametime.h"
+#include "recipe.h"
 #include "world.h"
 
 class Game
@@ -35,9 +36,11 @@ class Game
         // Private Member Functions
         void render();
         
-        // Properties
-        World* _world;
+        // Properties 
         GameTime _time;
+        World* _world;
+        Being* _player;
+        list<Recipe*> _recipes;
     
         WINDOW* _description;
         WINDOW* _footer;
