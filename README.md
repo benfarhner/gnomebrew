@@ -19,7 +19,9 @@ You are a gnome. When you start a new game, you can pick your name and gender, o
 
 Typical gameplay involves moving around the map with the arrow keys, interacting with and creating objects to build your world.
 
-Press F1 to bring up the main menu. The options are pretty straightforward.
+### Key Commands
+* `F1` brings up the pause menu. The options are pretty straightforward.
+* `h` harvests, or grabs, the top item on the tile your gnome is currently on. Not all items can be harvested!
 
 
 Time
