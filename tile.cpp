@@ -96,7 +96,9 @@ list<string> Tile::getDescriptions()
              it != _objects->end();
              ++it)
         {
-            descriptions.push_back((*it)->getDescription());
+            string description(1, (*it)->getSymbol());
+            description += " " + (*it)->getDescription();
+            descriptions.push_back(description);
         }
     }
     else

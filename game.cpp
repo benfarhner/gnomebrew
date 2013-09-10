@@ -23,7 +23,7 @@ Game::Game()
     _time.setHours(6); // 6:00am
     
 #ifndef DEBUG
-    _description = newwin(LINES - 2, 20, 0, COLS - 20);
+    _description = newwin(LINES - 2, 30, 0, COLS - 30);
     _footer = newwin(2, COLS, LINES - 2, 0);
 #endif
     
@@ -115,7 +115,7 @@ void Game::render()
     
     WINDOW* map = _world->render();
     int mapHeight = LINES - 3;
-    int mapWidth = COLS - 23;
+    int mapWidth = COLS - 33;
     int mapRow = _player->getY() - (mapHeight / 2);
     int mapCol = _player->getX() - (mapWidth / 2);
     
