@@ -6,62 +6,122 @@ Location.java
 
 public class Location
 {
-    private int _row;
-    private int _column;
+    /*
+     * Enumerations
+     */
+    
+    public enum Direction
+    {
+        North,
+        South,
+        East,
+        West
+    }
+    
+    /*
+     * Properties
+     */
+    
+    private int _x;
+    private int _y;
+    
+    /*
+     * Constructors
+     */
     
     public Location()
     {
-        _row = 0;
-        _column = 0;
+        _x = 0;
+        _y = 0;
     }
     
-    public Location(int row, int column)
+    public Location(int x, int y)
     {
-        setRow(row);
-        setColumn(column);
+        setX(x);
+        setY(y);
     }
     
-    public int getRow()
+    public Location(Location copy)
     {
-        return _row;
+        setX(copy._x);
+        setY(copy._y);
     }
     
-    public int getColumn()
-    {
-        return _column;
-    }
+    /*
+     * Accessors
+     */
     
     public int getX()
     {
-        return _column;
+        return _x;
     }
     
     public int getY()
     {
-        return _row;
+        return _y;
     }
     
-    public void setRow(int row)
+    /*
+     * Mutators
+     */
+    
+    public void setX(int x)
     {
-        if (row >= 0)
+        if (x >= 0)
         {
-            _row = row;
+            _x = x;
         }
         else
         {
-            _row = 0;
+            _x = 0;
         }
     }
     
-    public void setColumn(int column)
+    public void setY(int y)
     {
-        if (column >= 0)
+        if (y >= 0)
         {
-            _column = column;
+            _y = y;
         }
         else
         {
-            _column = 0;
+            _y = 0;
+        }
+    }
+    
+    /*
+     * Functions
+     */
+    
+    public boolean equals(Location other)
+    {
+        return (_x == other._x && _y == other._y);
+    }
+    
+    public int hashCode()
+    {
+        return _x * _y * (_x + _y);
+    }
+    
+    public void move(Direction direction)
+    {
+        if (direction == Direction.North &&
+            _y > 0)
+        {
+            _y--;
+        }
+        else if (direction == Direction.South)
+        {
+            _y++;
+        }
+        else if (direction == Direction.East)
+        {
+            _x++;
+        }
+        else if (direction == Direction.West &&
+                 _x > 0)
+        {
+            _x--;
         }
     }
 }
