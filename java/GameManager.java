@@ -64,8 +64,8 @@ public class GameManager implements KeyListener
         _gamePanel.setPreferredSize(new Dimension(width, height));
         
         _panels = new JPanel(new CardLayout());
-        _panels.add(_mainMenuPanel);
-        _panels.add(_gamePanel);
+        _panels.add(_mainMenuPanel, MAINMENUPANEL);
+        _panels.add(_gamePanel, GAMEPANEL);
         //_panels.add(_pauseMenuPanel);
         
         _window.add(_panels, BorderLayout.CENTER);
