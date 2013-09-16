@@ -39,9 +39,8 @@ public class GameManager implements KeyListener
     {
         _running = true;
         
-        // Load game font, skin, and other resources
+        // Load game skin
         Skin.load();
-        Font.load();
         
         _world = new World(257);
         _player = new Being();
@@ -57,7 +56,7 @@ public class GameManager implements KeyListener
         _window.setPreferredSize(new Dimension(width, height));
         _window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
-        _mainMenuPanel = new Menu();
+        _mainMenuPanel = new MainMenu();
         _mainMenuPanel.setPreferredSize(new Dimension(width, height));
         
         _gamePanel = new WorldView(_world, _player);

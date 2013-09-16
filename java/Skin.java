@@ -26,6 +26,7 @@ public class Skin
     private static Color _foregroundColor;
     private static Color _highlightColor;
     private static HashMap<Integer, BufferedImage> _entityImages;
+    private static BufferedImage font = null;
     
     /*
      * Accessors
@@ -56,8 +57,13 @@ public class Skin
         return _entityImages.get(type);
     }
     
+    public static BufferedImage getFont()
+    {
+        return font;
+    }
+    
     /*
-     * Functions
+     * Public Methods
      */
     
     public static void load()
@@ -148,10 +154,20 @@ public class Skin
         {
             System.err.format("IOException: %s%n", e);
         }
+        
+        // Load font file
+        try
+        {
+            font = ImageIO.read(new File("font.png"));
+        }
+        catch (IOException e)
+        {
+            System.err.println("Oops, can't load font! " + e.toString());
+        }
     }
     
     /*
-     * Private Functions
+     * Private Methods
      */
     
     private static BufferedImage loadImage(String def)
