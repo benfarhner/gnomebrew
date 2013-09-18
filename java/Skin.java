@@ -27,6 +27,7 @@ public class Skin
     private static Color _highlightColor;
     private static HashMap<Integer, BufferedImage> _entityImages;
     private static BufferedImage font = null;
+    private static BufferedImage menuBackground = null;
     
     /*
      * Accessors
@@ -60,6 +61,11 @@ public class Skin
     public static BufferedImage getFont()
     {
         return font;
+    }
+    
+    public static BufferedImage getMenuBackground()
+    {
+        return menuBackground;
     }
     
     /*
@@ -163,6 +169,16 @@ public class Skin
         catch (IOException e)
         {
             System.err.println("Oops, can't load font! " + e.toString());
+        }
+        
+        // Load menu background image
+        try
+        {
+            menuBackground = ImageIO.read(new File("menubg.png"));
+        }
+        catch (IOException e)
+        {
+            System.err.println("Oops, can't load menu background! " + e.toString());
         }
     }
     

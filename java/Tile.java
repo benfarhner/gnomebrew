@@ -12,7 +12,7 @@ public class Tile
      * Properties
      */
     
-    private ArrayList<Entity> _entities;
+    private ArrayList<Entity> entities;
     
     /*
      * Constructors
@@ -20,33 +20,38 @@ public class Tile
     
     public Tile()
     {
-        _entities = new ArrayList<Entity>();
+        entities = new ArrayList<Entity>();
     }
     
     /*
-     * Functions
+     * Public Methods
      */
     
     public void pushEntity(Entity entity)
     {
-        _entities.add(0, entity);
+        entities.add(0, entity);
     }
     
     public void popEntity()
     {
-        if (_entities.size() > 0)
+        if (entities.size() > 0)
         {
-            _entities.remove(0);
+            entities.remove(0);
         }
     }
     
     public Entity getTopEntity()
     {
-        if (_entities.size() > 0)
+        if (entities.size() > 0)
         {
-            return _entities.get(0);
+            return entities.get(0);
         }
         
         return null;
+    }
+    
+    public ArrayList<Entity> getEntities()
+    {
+        return entities;
     }
 }

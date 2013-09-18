@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class GameManager implements KeyListener
+public class GameManager implements MenuListener, KeyListener
 {
     /*
      * Properties
@@ -20,14 +20,17 @@ public class GameManager implements KeyListener
     private Being _player;
     
     private JFrame _window;
-    private JPanel _panels;
-    private JPanel _mainMenuPanel;
-    private JPanel _gamePanel;
-    private JPanel _pauseMenuPanel;
+    private RenderingPanel panel;
     
-    private final static String MAINMENUPANEL = "_mainMenuPanel";
-    private final static String GAMEPANEL = "_gamePanel";
-    private final static String PAUSEMENUPANEL = "_pauseMenuPanel";
+    private WorldView gameView;
+    private MenuView mainMenuView;
+    private MenuView pauseMenuView;
+    
+    // Menu item IDs
+    private final static int MENU_QUIT = 0;
+    private final static int MAINMENU_LOADGAME = 10;
+    private final static int MAINMENU_NEWGAME = 11;
+    private final static int PAUSEMENU_RESUME = 20;
     
     private final static int FPS = 30;
     
@@ -45,33 +48,40 @@ public class GameManager implements KeyListener
         _world = new World(257);
         _player = new Being();
         
+        int width = 80 * Skin.getTileSize().width;
+        int height = 60 * Skin.getTileSize().height;
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = 640;
-        int height = 480;
         
         _window = new JFrame();
-        //_window.addKeyListener(this);
         _window.setLocation((int)((screen.getWidth() - width) / 2),
                             (int)((screen.getHeight() - height) / 2));
-        _window.setPreferredSize(new Dimension(width, height));
         _window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
-        _mainMenuPanel = new MainMenu();
-        _mainMenuPanel.setPreferredSize(new Dimension(width, height));
+        panel = new RenderingPanel();
+        panel.setPreferredSize(new Dimension(width, height));
+        panel.addKeyListener(this);
+        _window.add(panel);
         
-        _gamePanel = new WorldView(_world, _player);
-        _gamePanel.setPreferredSize(new Dimension(width, height));
+        Menu mainMenu = new Menu();
+        mainMenu.addMenuListener(this);
+        mainMenu.add(new MenuItem(MAINMENU_LOADGAME, "Load Game", false));
+        mainMenu.add(new MenuItem(MAINMENU_NEWGAME, "New Game"));
+        mainMenu.add(new MenuItem(MENU_QUIT, "Quit"));
+        mainMenuView = new MenuView(mainMenu);
+        panel.setView(mainMenuView);
         
-        _panels = new JPanel(new CardLayout());
-        _panels.add(_mainMenuPanel, MAINMENUPANEL);
-        _panels.add(_gamePanel, GAMEPANEL);
-        //_panels.add(_pauseMenuPanel);
+        Menu pauseMenu = new Menu();
+        pauseMenu.addMenuListener(this);
+        pauseMenu.add(new MenuItem(PAUSEMENU_RESUME, "Resume"));
+        pauseMenu.add(new MenuItem(MENU_QUIT, "Quit"));
+        pauseMenuView = new MenuView(pauseMenu);
         
-        _window.add(_panels, BorderLayout.CENTER);
+        gameView = new WorldView(_world, _player);
+        
         _window.pack();
         _window.setVisible(true);
         _window.setResizable(false);
-        _mainMenuPanel.requestFocus();
+        panel.requestFocus();
     }
     
     public boolean update()
@@ -87,30 +97,49 @@ public class GameManager implements KeyListener
     }
     
     /*
+     * MenuListener Methods
+     */
+    
+    public void handleSelection(MenuItem selection)
+    {
+        if (selection.getID() == MENU_QUIT)
+        {
+            quit();
+        }
+        else if (selection.getID() == MAINMENU_NEWGAME)
+        {
+            panel.setView(gameView);
+        }
+        else if (selection.getID() == PAUSEMENU_RESUME)
+        {
+            panel.setView(gameView);
+        }
+    }
+    
+    /*
      * KeyListener Methods
      */
     
-    public void keyTyped(KeyEvent e)
-    {
-    }
+    public void keyTyped(KeyEvent e) { }
     
     public void keyPressed(KeyEvent e)
     {
+        panel.render();
     }
     
     public void keyReleased(KeyEvent e)
     {
-        switch(e.getKeyCode())
-		{
-		    case KeyEvent.VK_ESCAPE:
-		        // Show pause menu
-		        break;
-			case KeyEvent.VK_Q:
-			    quit();
-			    break;
-		}
-		
-		_window.repaint();
+        if (panel.getView() == gameView)
+        {
+            switch (e.getKeyCode())
+            {
+                case KeyEvent.VK_ESCAPE:
+                    panel.setView(pauseMenuView);
+                    break;
+            }
+        }
+        
+        panel.render();
     }
     
     /*

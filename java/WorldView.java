@@ -10,13 +10,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
+import java.util.*;
 
-public class WorldView extends JPanel implements KeyListener
+public class WorldView extends RenderableView
 {
     /*
      * Properties
      */
     
+    private BufferedImage view;
     private World _world;
     private Being _player;
     
@@ -26,11 +28,6 @@ public class WorldView extends JPanel implements KeyListener
     
     public WorldView(World world, Being player)
     {
-        super();
-        
-        setOpaque(false);
-        addKeyListener(this);
-        
         _world = world;
         _player = player;
     }
@@ -39,11 +36,68 @@ public class WorldView extends JPanel implements KeyListener
      * Public Methods
      */
     
-    public void paintComponent(Graphics g)
+    public BufferedImage render(Dimension size)
     {
-        super.paintComponent(g);
+        view = new BufferedImage(size.width,
+                                 size.height,
+                                 BufferedImage.TYPE_INT_ARGB);
         
-        render(g);
+        Graphics2D g = view.createGraphics();
+        BufferedImage image = null;
+        
+        int width = size.width / Skin.getTileSize().width;
+        int height = size.height / Skin.getTileSize().height;
+        int topLeftX = _player.getLocation().getX() - (width / 2);
+        int topLeftY = _player.getLocation().getY() - (height / 2);
+        
+        if (topLeftX < 0)
+        {
+            topLeftX = 0;
+        }
+        else if (topLeftX + width >= _world.getSize())
+        {
+            topLeftX = _world.getSize() - width - 1;
+        }
+        
+        if (topLeftY < 0)
+        {
+            topLeftY = 0;
+        }
+        else if (topLeftY + height >= _world.getSize())
+        {
+            topLeftY = _world.getSize() - height - 1;
+        }
+        
+        int bottomRightX = topLeftX + width;
+        int bottomRightY = topLeftY + height;
+        
+        for (int x = topLeftX; x < bottomRightX; x++)
+        {
+            for (int y = topLeftY; y < bottomRightY; y++)
+            {
+                if (_player.getLocation().getX() == x &&
+                    _player.getLocation().getY() == y)
+                {
+                    image = Skin.getEntityImage(_player.getType());
+                }
+                else
+                {
+                    image = getTileImage(x, y);
+                }
+                
+                if (image != null)
+                {
+                    g.drawImage(image,
+                                (x - topLeftX) * Skin.getTileSize().width,
+                                (y - topLeftY) * Skin.getTileSize().height,
+                                null);
+                }
+            }
+        }
+        
+        g.dispose();
+        
+        return view;
     }
     
     /*
@@ -91,8 +145,6 @@ public class WorldView extends JPanel implements KeyListener
 			    }
 			    break;
 		}
-		
-		repaint();
     }
     
     public void keyReleased(KeyEvent e)
@@ -103,79 +155,33 @@ public class WorldView extends JPanel implements KeyListener
      * Private Methods
      */
     
-    private void render(Graphics g)
-    {
-        int width = getPreferredSize().width / Skin.getTileSize().width;
-        int height = getPreferredSize().height / Skin.getTileSize().height;
-        int topLeftX = _player.getLocation().getX() - (width / 2);
-        int topLeftY = _player.getLocation().getY() - (height / 2);
-        
-        if (topLeftX < 0)
-        {
-            topLeftX = 0;
-        }
-        else if (topLeftX + width >= _world.getSize())
-        {
-            topLeftX = _world.getSize() - width - 1;
-        }
-        
-        if (topLeftY < 0)
-        {
-            topLeftY = 0;
-        }
-        else if (topLeftY + height >= _world.getSize())
-        {
-            topLeftY = _world.getSize() - height - 1;
-        }
-        
-        int bottomRightX = topLeftX + width;
-        int bottomRightY = topLeftY + height;
-        
-        BufferedImage image = null;
-        
-        for (int x = topLeftX; x < bottomRightX; x++)
-        {
-            for (int y = topLeftY; y < bottomRightY; y++)
-            {
-                if (_player.getLocation().getX() == x &&
-                    _player.getLocation().getY() == y)
-                {
-                    image = Skin.getEntityImage(_player.getType());
-                }
-                else
-                {
-                    image = getTileImage(x, y);
-                }
-                
-                if (image != null)
-                {
-                    g.drawImage(image,
-                                (x - topLeftX) * Skin.getTileSize().width,
-                                (y - topLeftY) * Skin.getTileSize().height,
-                                null);
-                }
-            }
-        }
-    }
-    
     private BufferedImage getTileImage(int x, int y)
     {
         Tile tile = _world.getTile(x, y);
         
         if (tile != null)
         {
-            Entity entity = tile.getTopEntity();
-        
-            if (entity != null)
-            {
-                BufferedImage image;
-                image = Skin.getEntityImage(entity.getType());
+            BufferedImage image;
+            image = new BufferedImage(Skin.getTileSize().width,
+                                      Skin.getTileSize().height,
+                                      BufferedImage.TYPE_INT_ARGB);
             
-                if (image != null)
-                {
-                    return image;
-                }
+            Graphics2D g = image.createGraphics();
+            g.setBackground(Skin.getBackgroundColor());
+            g.fillRect(0, 0,
+                       Skin.getTileSize().width, Skin.getTileSize().height);
+            g.setComposite(AlphaComposite.SrcOver);
+            
+            ArrayList<Entity> entities = tile.getEntities();
+            
+            for (int i = entities.size() - 1; i >= 0; i--)
+            {
+                g.drawImage(Skin.getEntityImage(entities.get(i).getType()),
+                            0, 0,
+                            null);
             }
+            
+            return image;
         }
         
         return null;

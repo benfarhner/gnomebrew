@@ -21,8 +21,9 @@ public class Font
     
     // Font styles
     public final static int NORMAL = 0;
-    public final static int HIGHLIGHT = 1;
-    public final static int DISABLED = 2;
+    public final static int BOLD = 1;
+    public final static int HIGHLIGHT = 2;
+    public final static int DISABLED = 3;
     
     /*
      * Properties
@@ -47,7 +48,7 @@ public class Font
         }
         
         // Make sure style is valid so we don't go out of bounds
-        if (style < 0 || style > 2)
+        if (style < 0 || style > 3)
         {
             return;
         }
@@ -61,10 +62,10 @@ public class Font
             if (charIndex >= 0)
             {
                 g.drawImage(Skin.getFont(),
-                            x + i * 16,
+                            x + i * 8,
                             y,
-                            x + i * 16 + 16,
-                            y + 16,
+                            x + i * 8 + 8,
+                            y + 8,
                             charIndex * 8,
                             8 * style,
                             charIndex * 8 + 8,
