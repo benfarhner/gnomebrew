@@ -22,9 +22,10 @@ public class GameManager implements MenuListener, KeyListener
     private JFrame _window;
     private RenderingPanel panel;
     
-    private WorldView gameView;
+    private WorldView gameView = null;
     private MenuView mainMenuView;
     private MenuView pauseMenuView;
+    private MenuView inventoryView;
     
     // Menu item IDs
     private final static int MENU_QUIT = 0;
@@ -76,7 +77,9 @@ public class GameManager implements MenuListener, KeyListener
         pauseMenu.add(new MenuItem(MENU_QUIT, "Quit"));
         pauseMenuView = new MenuView(pauseMenu);
         
-        gameView = new WorldView(_world, _player);
+        Menu inventory = new InventoryMenu(_player);
+        inventory.addMenuListener(this);
+        inventoryView = new MenuView(inventory);
         
         _window.pack();
         _window.setVisible(true);
@@ -108,6 +111,7 @@ public class GameManager implements MenuListener, KeyListener
         }
         else if (selection.getID() == MAINMENU_NEWGAME)
         {
+            gameView = new WorldView(_world, _player);
             panel.setView(gameView);
         }
         else if (selection.getID() == PAUSEMENU_RESUME)
@@ -120,10 +124,14 @@ public class GameManager implements MenuListener, KeyListener
      * KeyListener Methods
      */
     
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e)
+    {
+        panel.getView().keyTyped(e);
+    }
     
     public void keyPressed(KeyEvent e)
     {
+        panel.getView().keyPressed(e);
         panel.render();
     }
     
@@ -136,9 +144,19 @@ public class GameManager implements MenuListener, KeyListener
                 case KeyEvent.VK_ESCAPE:
                     panel.setView(pauseMenuView);
                     break;
+                case KeyEvent.VK_A:
+                    panel.setView(inventoryView);
+                    break;
             }
         }
+        else if (gameView != null &&
+                 panel.getView() instanceof MenuView &&
+                 e.getKeyCode() == KeyEvent.VK_ESCAPE)
+        {
+            panel.setView(gameView);
+        }
         
+        panel.getView().keyReleased(e);
         panel.render();
     }
     

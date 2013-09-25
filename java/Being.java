@@ -62,6 +62,21 @@ public class Being extends Entity
         return _name;
     }
     
+    public String getSex()
+    {
+        return _sex;
+    }
+    
+    public String getMood()
+    {
+        return _mood;
+    }
+    
+    public ArrayList<Entity> getInventory()
+    {
+        return _inventory;
+    }
+    
     /*
      * Mutators
      */

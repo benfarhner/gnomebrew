@@ -48,6 +48,14 @@ public class Menu
         }
     }
     
+    public void clear()
+    {
+        if (items != null)
+        {
+            items.clear();
+        }
+    }
+    
     public void addMenuListener(MenuListener listener)
     {
         if (listener != null)
