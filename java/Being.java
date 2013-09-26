@@ -16,10 +16,10 @@ public class Being extends Entity
      * Properties
      */
     
-    private String _name;
-    private String _sex;
-    private String _mood;
-    private ArrayList<Entity> _inventory;
+    private String name;
+    private String sex;
+    private String mood;
+    private ArrayList<Entity> inventory;
     
     private ArrayList<String> firstNames;
     private ArrayList<String> lastNameModifiers;
@@ -34,23 +34,23 @@ public class Being extends Entity
     {
         loadNames();
         
-        _type = 0;
-        _fetchable = false;
+        type = 0;
+        fetchable = false;
         
-        _name = generateName();
-        _sex = generateSex();
-        _mood = generateMood();
-        _inventory = new ArrayList<Entity>();
+        name = generateName();
+        sex = generateSex();
+        mood = generateMood();
+        inventory = new ArrayList<Entity>();
     }
     
     public Being(Being copy)
     {
         super(copy);
         
-        _name = copy._name;
-        _sex = copy._sex;
-        _mood = copy._mood;
-        _inventory = new ArrayList<Entity>(copy._inventory);
+        name = copy.name;
+        sex = copy.sex;
+        mood = copy.mood;
+        inventory = new ArrayList<Entity>(copy.inventory);
     }
     
     /*
@@ -59,22 +59,22 @@ public class Being extends Entity
     
     public String getName()
     {
-        return _name;
+        return name;
     }
     
     public String getSex()
     {
-        return _sex;
+        return sex;
     }
     
     public String getMood()
     {
-        return _mood;
+        return mood;
     }
     
     public ArrayList<Entity> getInventory()
     {
-        return _inventory;
+        return inventory;
     }
     
     /*
@@ -85,7 +85,7 @@ public class Being extends Entity
     {
         if (entity != null)
         {
-            _inventory.add(entity);
+            inventory.add(entity);
         }
     }
     
@@ -101,11 +101,12 @@ public class Being extends Entity
     // Determines if this Being has the items in inventory to brew the recipe
     public boolean canBrew(Recipe recipe)
     {
-        ArrayList<Entity> ingredients = recipe.getIngredients();
+        ArrayList<Entity> ingredients;
+        ingredients = new ArrayList<Entity>(recipe.getIngredients());
         
-        for (int i = 0; i < _inventory.size(); i++)
+        for (int i = 0; i < inventory.size(); i++)
         {
-            ingredients.remove(_inventory.get(i));  
+            ingredients.remove(inventory.get(i));  
         }
     
         return ingredients.size() == 0;
@@ -115,8 +116,8 @@ public class Being extends Entity
     // Brews the given recipe and returns the newly created Entity
     public void brew(Recipe recipe)
     {
-        _inventory.removeAll(recipe.getIngredients());
-        _inventory.add(recipe.getResult());
+        inventory.removeAll(recipe.getIngredients());
+        inventory.add(recipe.getResult());
     }
     
     /*

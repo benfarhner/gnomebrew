@@ -29,7 +29,7 @@ public class Font
      * Properties
      */
     
-    private static String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-";
     
     /*
      * Public Methods

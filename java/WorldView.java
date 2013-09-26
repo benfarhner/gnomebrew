@@ -36,6 +36,10 @@ public class WorldView extends RenderableView
      * Public Methods
      */
     
+    public void update()
+    {
+    }
+    
     public BufferedImage render(Dimension size)
     {
         view = new BufferedImage(size.width,

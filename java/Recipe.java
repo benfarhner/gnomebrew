@@ -14,8 +14,8 @@ public class Recipe
      * Properties
      */
     
-    Entity _result;
-    ArrayList<Entity> _ingredients;
+    Entity result;
+    ArrayList<Entity> ingredients;
     
     /*
      * Constructors
@@ -23,26 +23,27 @@ public class Recipe
     
     public Recipe()
     {
-        _result = null;
-        _ingredients = new ArrayList<Entity>();
+        result = null;
+        ingredients = new ArrayList<Entity>();
     }
     
     public Recipe(Entity result)
     {
-        _result = result;
+        this();
+        this.result = result;
     }
     
     public Recipe(Entity result, ArrayList<Entity> ingredients)
     {
-        _result = result;
+        this.result = result;
         
         if (ingredients != null)
         {
-            _ingredients = ingredients;
+            this.ingredients = ingredients;
         }
         else
         {
-            _ingredients = new ArrayList<Entity>();
+            this.ingredients = new ArrayList<Entity>();
         }
     }
     
@@ -52,12 +53,12 @@ public class Recipe
     
     public Entity getResult()
     {
-        return new Entity(_result);
+        return new Entity(result);
     }
     
     public ArrayList<Entity> getIngredients()
     {
-        return _ingredients;
+        return ingredients;
     }
     
     /*
@@ -68,7 +69,7 @@ public class Recipe
     {
         if (ingredient != null)
         {
-            _ingredients.add(ingredient);
+            ingredients.add(ingredient);
         }
     }
     
@@ -81,17 +82,17 @@ public class Recipe
         if (other instanceof Recipe)
         {
             Recipe otherRecipe = (Recipe) other;
-            ArrayList<Entity> ingredients = new ArrayList<Entity>(_ingredients);
+            ArrayList<Entity> list = new ArrayList<Entity>(ingredients);
         
-            for (int i = 0; i < otherRecipe._ingredients.size(); i++)
+            for (int i = 0; i < otherRecipe.ingredients.size(); i++)
             {
-                if (!ingredients.remove(otherRecipe._ingredients.get(i)))
+                if (!list.remove(otherRecipe.ingredients.get(i)))
                 {
                     return false;
                 }            
             }
         
-            return ingredients.size() == 0;
+            return list.size() == 0;
         }
         
         return false;

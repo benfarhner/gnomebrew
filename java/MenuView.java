@@ -30,6 +30,11 @@ public class MenuView extends RenderableView
      * Public Methods
      */
     
+    public void update()
+    {
+        menu.update();
+    }
+    
     public BufferedImage render(Dimension size)
     {
         return menu.render(size);
@@ -45,10 +50,10 @@ public class MenuView extends RenderableView
     
     public void keyPressed(KeyEvent e)
     {
-        menu.handleInput(e.getKeyCode());
     }
     
     public void keyReleased(KeyEvent e)
     {
+        menu.handleInput(e.getKeyCode());
     }
 }

@@ -58,6 +58,10 @@ public class RenderingPanel extends JPanel implements KeyListener
         //removeKeyListener((KeyListener)this.view);
         this.view = view;
         //addKeyListener((KeyListener)view);
+        if (this.view != null)
+        {
+            this.view.update();
+        }
         
         // Store previous rendered view
         oldBuffer = copyImage(buffer);

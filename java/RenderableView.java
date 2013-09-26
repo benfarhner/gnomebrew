@@ -12,6 +12,7 @@ import java.awt.image.*;
 
 public abstract class RenderableView implements KeyListener
 {
+    public abstract void update();
     public abstract BufferedImage render(Dimension size);
     
     public void keyTyped(KeyEvent e) { }

@@ -10,11 +10,11 @@ public class Entity implements Comparable<Entity>
      * Properties
      */
     
-    protected int _type;
-    protected Location _location;
-    protected String _description;
-    //private GameTime _age;
-    protected boolean _fetchable;
+    protected int type;
+    protected Location location;
+    protected String description;
+    //private GameTime age;
+    protected boolean fetchable;
     
     /*
      * Constructors
@@ -22,11 +22,11 @@ public class Entity implements Comparable<Entity>
     
     public Entity()
     {
-        _type = 0;
-        _location = new Location(0, 0);
-        _description = "";
-        //_age = new GameTime;
-        _fetchable = false;
+        type = 0;
+        location = new Location(0, 0);
+        description = "";
+        //age = new GameTime;
+        fetchable = false;
     }
     
     // DESTROY
@@ -34,15 +34,15 @@ public class Entity implements Comparable<Entity>
     {
         this();
         
-        _type = type;
+        this.type = type;
     }
     
     public Entity(Entity copy)
     {
-        _type = copy._type;
-        _location = new Location(copy._location);
-        _description = copy._description;
-        _fetchable = copy._fetchable;
+        type = copy.type;
+        location = new Location(copy.location);
+        description = copy.description;
+        fetchable = copy.fetchable;
     }
     
     /*
@@ -51,22 +51,22 @@ public class Entity implements Comparable<Entity>
     
     public int getType()
     {
-        return _type;
+        return type;
     }
     
     public Location getLocation()
     {
-        return _location;
+        return location;
     }
     
     public String getDescription()
     {
-        return _description;
+        return description;
     }
     
     public boolean isFetchable()
     {
-        return _fetchable;
+        return fetchable;
     }
     
     /*
@@ -77,7 +77,7 @@ public class Entity implements Comparable<Entity>
     {
         if (other instanceof Entity)
         {
-            return _type == ((Entity) other)._type;
+            return type == ((Entity) other).type;
         }
         
         return false;
@@ -85,12 +85,12 @@ public class Entity implements Comparable<Entity>
     
     public int hashCode()
     {
-        return _type;
+        return type;
     }
     
     public int compareTo(Entity other)
     {
-        return _type - other._type;
+        return type - other.type;
     }
     
     public void update()
@@ -99,6 +99,6 @@ public class Entity implements Comparable<Entity>
     
     public void move(Location.Direction direction)
     {
-        _location.move(direction);
+        location.move(direction);
     }
 }

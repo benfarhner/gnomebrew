@@ -19,10 +19,10 @@ public class Menu
     
     protected BufferedImage buffer;
     
-    private ArrayList<MenuItem> items;
-    private ListIterator<MenuItem> iterator;
+    protected ArrayList<MenuItem> items;
+    protected ListIterator<MenuItem> iterator;
     
-    private ArrayList<MenuListener> listeners;
+    protected ArrayList<MenuListener> listeners;
     
     /*
      * Constructors
@@ -67,6 +67,10 @@ public class Menu
     /*
      * Public Methods
      */
+    
+    public void update()
+    {
+    }
     
     public BufferedImage render(Dimension size)
     {

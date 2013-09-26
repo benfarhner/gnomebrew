@@ -6,6 +6,7 @@ GameManager.java
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 
 public class GameManager implements MenuListener, KeyListener
@@ -77,7 +78,7 @@ public class GameManager implements MenuListener, KeyListener
         pauseMenu.add(new MenuItem(MENU_QUIT, "Quit"));
         pauseMenuView = new MenuView(pauseMenu);
         
-        Menu inventory = new InventoryMenu(_player);
+        Menu inventory = new InventoryMenu(_player, genRecipes());
         inventory.addMenuListener(this);
         inventoryView = new MenuView(inventory);
         
@@ -168,5 +169,18 @@ public class GameManager implements MenuListener, KeyListener
     {
         _window.dispose();
         System.exit(0);
+    }
+    
+    private ArrayList<Recipe> genRecipes()
+    {
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        
+        ArrayList<Entity> ingredients = new ArrayList<Entity>();
+        ingredients.add(new Stone());
+        ingredients.add(new Stone());
+        
+        recipes.add(new Recipe(new StoneMill(), ingredients));
+        
+        return recipes;
     }
 }

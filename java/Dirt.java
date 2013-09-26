@@ -10,7 +10,7 @@ public class Dirt extends Entity
 {
     public Dirt()
     {
-        _type = EntityType.Dirt;
-        _fetchable = false;
+        type = EntityType.Dirt;
+        fetchable = false;
     }
 }

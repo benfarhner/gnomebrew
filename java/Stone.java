@@ -8,7 +8,8 @@ public class Stone extends Entity
 {
     public Stone()
     {
-        _type = EntityType.Stone;
-        _fetchable = true;
+        type = EntityType.Stone;
+        description = "Stone";
+        fetchable = true;
     }
 }
