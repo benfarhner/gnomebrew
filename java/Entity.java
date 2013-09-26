@@ -13,7 +13,7 @@ public class Entity implements Comparable<Entity>
     protected int type;
     protected Location location;
     protected String description;
-    //private GameTime age;
+    protected GameTime age;
     protected boolean fetchable;
     
     /*
@@ -25,7 +25,7 @@ public class Entity implements Comparable<Entity>
         type = 0;
         location = new Location(0, 0);
         description = "";
-        //age = new GameTime;
+        age = new GameTime();
         fetchable = false;
     }
     
