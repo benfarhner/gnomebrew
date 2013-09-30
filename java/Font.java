@@ -14,26 +14,30 @@ import java.io.*;
 import javax.imageio.*;
 
 public class Font
-{
-    /*
-     * Constants
-     */
-    
-    // Font styles
-    public final static int NORMAL = 0;
-    public final static int BOLD = 1;
-    public final static int HIGHLIGHT = 2;
-    public final static int DISABLED = 3;
-    
+{    
     /*
      * Properties
      */
     
     private static String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-";
+    private static int charWidth = 8;
+    private static int charHeight = 8;
+    private static int charPaddingX = 0;
+    private static int charPaddingY = 2;
     
     /*
      * Public Methods
      */
+    
+    public static int getLineHeight()
+    {
+        return charHeight + charPaddingY;
+    }
+    
+    public static int getWidth(String text)
+    {
+        return text.length() * (charWidth + charPaddingX);
+    }
     
     public static void draw(String text,
                             Graphics g,
@@ -48,7 +52,7 @@ public class Font
         }
         
         // Make sure style is valid so we don't go out of bounds
-        if (style < 0 || style > 3)
+        if (!FontStyle.isValid(style))
         {
             return;
         }
@@ -62,14 +66,29 @@ public class Font
             if (charIndex >= 0)
             {
                 g.drawImage(Skin.getFont(),
-                            x + i * 8,
+                            x + i * charWidth,
                             y,
-                            x + i * 8 + 8,
-                            y + 8,
-                            charIndex * 8,
-                            8 * style,
-                            charIndex * 8 + 8,
-                            8 * style + 8,
+                            x + i * charWidth + charWidth,
+                            y + charHeight,
+                            charIndex * charWidth,
+                            charHeight * style,
+                            charIndex * charWidth + charWidth,
+                            charHeight * style + charHeight,
+                            null);
+            }
+            else if (text.charAt(i) == '_')
+            {
+                charIndex = characters.indexOf('-');
+                
+                g.drawImage(Skin.getFont(),
+                            x + i * charWidth,
+                            y + charHeight / 2,
+                            x + i * charWidth + charWidth,
+                            y + charHeight,
+                            charIndex * charWidth,
+                            charHeight * style,
+                            charIndex * charWidth + charWidth,
+                            charHeight * style + charHeight / 2,
                             null);
             }
         }

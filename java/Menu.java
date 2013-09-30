@@ -11,13 +11,11 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
 
-public class Menu
+public class Menu extends Dialog
 {
     /*
      * Properties
      */
-    
-    protected BufferedImage buffer;
     
     protected ArrayList<MenuItem> items;
     protected ListIterator<MenuItem> iterator;
@@ -79,7 +77,7 @@ public class Menu
                                    BufferedImage.TYPE_INT_ARGB);
         
         renderBorder(size);
-        renderItems(size);
+        renderItems(size, new Dimension(0, 0));
         
         return buffer;
     }
@@ -102,7 +100,7 @@ public class Menu
 			    select();
 			    break;
 			default:
-			    repaint = false;
+                items.get(iterator.nextIndex()).handleInput(keycode);
 			    break;
 		}
 		
@@ -126,95 +124,97 @@ public class Menu
         }
     }
     
-    protected void renderBorder(Dimension size)
-    {
-        BufferedImage bg = Skin.getMenuBackground();
-        
-        // Make sure we have a background image to work with
-        if (bg == null)
-        {
-            return;
-        }
-        
-        Graphics2D g = buffer.createGraphics();
-        g.setComposite(AlphaComposite.Clear);
-        g.setBackground(new Color(255, 255, 255, 0));
-        g.fillRect(0, 0, size.width, size.height);
-        g.setComposite(AlphaComposite.SrcOver);
-        
-        // Calculate the width of each "tile" in the background image
-        int width = bg.getWidth() / 3;
-        
-        // Clear the view so we don't have overlaid transparent layers
-        g.clearRect(0, 0, size.width, size.height);
-        //g.setColor(Skin.getBackgroundColor());
-        //g.fillRect(0, 0, size.width, size.height);
-        
-        // Draw the border corners first
-        g.drawImage(bg.getSubimage(0, 0, width, width), null, 0, 0);
-        g.drawImage(bg.getSubimage(width * 2, 0, width, width), null,
-                    size.width - width, 0);
-        g.drawImage(bg.getSubimage(0, width * 2, width, width), null,
-                    0, size.height - width);
-        g.drawImage(bg.getSubimage(width * 2, width * 2, width, width), null,
-                    size.width - width, size.height - width);
-        
-        // Draw border sides
-        int sideWidth = size.width - width - width;
-        int sideHeight = size.height - width - width;
-        
-        for (int y = width; y <= sideHeight; y += width)
-        {
-            // Left border
-            g.drawImage(bg.getSubimage(0, width, width, width), null,
-                        0, y);
-            
-            // Right border
-            g.drawImage(bg.getSubimage(width * 2, width, width, width), null,
-                        size.width - width, y);
-        }
-        
-        for (int x = width; x <= sideWidth; x += width)
-        {
-            for (int y = width; y <= sideHeight; y += width)
-            {
-                // Fill center
-                g.drawImage(bg.getSubimage(width, width, width, width), null,
-                            x, y);
-            }
-            
-            // Top border
-            g.drawImage(bg.getSubimage(width, 0, width, width), null,
-                        x, 0);
-            
-            // Bottom border
-            g.drawImage(bg.getSubimage(width, width * 2, width, width), null,
-                        x, size.height - width);
-        }
-        
-        g.dispose();
-    }
-    
-    /*
-     * Private Methods
-     */
-    
-    private void renderItems(Dimension size)
+    protected void renderItems(Dimension size, Dimension offset)
     {
         Graphics g = buffer.createGraphics();
+        int style;
+        boolean isCurrentItem;
+        MenuItem item;
+        String text;
+        int x, y;
         
         for (int i = 0; i < items.size(); i++)
         {
-            int style = (i == iterator.nextIndex() ? 2 : 
-                         (items.get(i).isEnabled() ? 0 : 3));
-            int x = (size.width - items.get(i).getText().length() * 8) / 2;
-            Font.draw(items.get(i).getText(), g, x, 32 + i * 10, style);
+            item = items.get(i);
+            isCurrentItem = (i == iterator.nextIndex());
+            
+            if (isCurrentItem)
+            {
+                style = FontStyle.Highlight;
+            }
+            else if (items.get(i).isEnabled())
+            {
+                style = FontStyle.Normal;
+            }
+            else
+            {
+                style = FontStyle.Disabled;
+            }
+            
+            switch (item.getAlignment())
+            {
+                case MenuItem.LeftAligned:
+                default:
+                    x = padding;
+                    break;
+                case MenuItem.Centered:
+                    x = (size.width - Font.getWidth(item.toString())) / 2;
+                    break;
+                case MenuItem.RightAligned:
+                    x = size.width - padding - Font.getWidth(item.toString());
+                    break;
+            }
+            
+            x += item.getPadding().width + offset.width;
+            y = padding + i * Font.getLineHeight() +
+                item.getPadding().height + offset.height;
+            
+            if (item instanceof EditableMenuItem)
+            {
+                EditableMenuItem eItem = (EditableMenuItem)item;
+                Font.draw(eItem.getLabel(), g, x, y, style);
+                
+                x += Font.getWidth(eItem.getLabel());
+                text = eItem.getText() + (isCurrentItem ? "_" : "");
+                Font.draw(text, g, x, y, FontStyle.Normal);
+            }
+            else if (item instanceof SwitchableMenuItem)
+            {
+                SwitchableMenuItem sItem = (SwitchableMenuItem)item;
+                Font.draw(sItem.getLabel(), g, x, y, style);
+                
+                x += Font.getWidth(sItem.getLabel());
+                ArrayList<MenuItem> options = sItem.getOptions();
+                MenuItem currentOption = sItem.getCurrentOption();
+                
+                for (MenuItem option : options)
+                {
+                    text = option.toString();
+                    
+                    if (option == currentOption)
+                    {
+                        style = FontStyle.Bold;
+                    }
+                    else
+                    {
+                        style = FontStyle.Normal;
+                    }
+                    
+                    Font.draw(text, g, x, y, style);
+                    x += Font.getWidth(sItem.getLabel() + "  ");
+                }
+            }
+            else
+            {
+                text = item.toString();
+                Font.draw(text, g, x, y, style);
+            }
         }
         
         g.dispose();
     }
     
-    private void nextItem()
+    protected void nextItem()
     {
         int count = 0;
         
@@ -236,7 +236,7 @@ public class Menu
                count < items.size());
     }
     
-    private void previousItem()
+    protected void previousItem()
     {
         int count = 0;
         
@@ -258,7 +258,7 @@ public class Menu
                count < items.size());
     }
     
-    private void firstItem()
+    protected void firstItem()
     {
         iterator = items.listIterator(items.size() - 1);
         nextItem();

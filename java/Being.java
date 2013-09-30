@@ -17,11 +17,12 @@ public class Being extends Entity
      */
     
     private String name;
-    private String sex;
+    private int sex;
     private String mood;
     private ArrayList<Entity> inventory;
     
-    private ArrayList<String> firstNames;
+    private ArrayList<String> maleNames;
+    private ArrayList<String> femaleNames;
     private ArrayList<String> lastNameModifiers;
     private ArrayList<String> lastNameNouns;
     private ArrayList<String> lastNameVerbs;
@@ -37,8 +38,8 @@ public class Being extends Entity
         type = 0;
         fetchable = false;
         
-        name = generateName();
         sex = generateSex();
+        name = generateName();
         mood = generateMood();
         inventory = new ArrayList<Entity>();
     }
@@ -62,7 +63,7 @@ public class Being extends Entity
         return name;
     }
     
-    public String getSex()
+    public int getSex()
     {
         return sex;
     }
@@ -80,6 +81,21 @@ public class Being extends Entity
     /*
      * Mutators
      */
+    
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    
+    public void setSex(int sex)
+    {
+        this.sex = sex;
+    }
+    
+    public void setMood(String mood)
+    {
+        this.mood = mood;
+    }
     
     public void addInventory(Entity entity)
     {
@@ -116,7 +132,13 @@ public class Being extends Entity
     // Brews the given recipe and returns the newly created Entity
     public void brew(Recipe recipe)
     {
-        inventory.removeAll(recipe.getIngredients());
+        ArrayList<Entity> ingredients = recipe.getIngredients();
+        
+        for (int i = 0; i < ingredients.size(); i++)
+        {
+            inventory.remove(ingredients.get(i));
+        }
+        
         inventory.add(recipe.getResult());
     }
     
@@ -124,11 +146,20 @@ public class Being extends Entity
      * Private Methods
      */
     
-    private String generateName()
+    public String generateName()
     {
+        String name = "";
+        
         Random rand = new Random((new Date()).getTime());
         
-        String name = firstNames.get(rand.nextInt(firstNames.size())) + " ";
+        if (sex == Sex.Female)
+        {
+            name = femaleNames.get(rand.nextInt(femaleNames.size())) + " ";
+        }
+        else
+        {
+            name = maleNames.get(rand.nextInt(maleNames.size())) + " ";
+        }
         
         String lastName = rand.nextInt(2) == 1 ?
             (lastNameNouns.get(rand.nextInt(lastNameNouns.size())) +
@@ -141,13 +172,13 @@ public class Being extends Entity
         return name;
     }
     
-    private String generateSex()
+    public int generateSex()
     {
         Random rand = new Random((new Date()).getTime());
-        return rand.nextInt() == 0 ? "M" : "F";
+        return rand.nextInt(2);
     }
     
-    private String generateMood()
+    public String generateMood()
     {
         return "";
     }
@@ -164,7 +195,12 @@ public class Being extends Entity
             
             if ((line = reader.readLine()) != null)
             {
-                firstNames = new ArrayList<String>(Arrays.asList(line.split(delimiter)));
+                maleNames = new ArrayList<String>(Arrays.asList(line.split(delimiter)));
+            }
+            
+            if ((line = reader.readLine()) != null)
+            {
+                femaleNames = new ArrayList<String>(Arrays.asList(line.split(delimiter)));
             }
             
             if ((line = reader.readLine()) != null)

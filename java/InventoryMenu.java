@@ -89,10 +89,10 @@ public class InventoryMenu extends Menu
     }
     
     /*
-     * Private Methods
+     * Protected Methods
      */
     
-    private void handleSelection()
+    protected void handleSelection()
     {
         if (currentColumn == 1)
         {
@@ -104,32 +104,61 @@ public class InventoryMenu extends Menu
         }
     }
     
-    private void renderItems(Dimension size)
+    protected void renderItems(Dimension size)
     {
-        Graphics g = buffer.createGraphics();
+        // Create grouped list of inventory items
+        Map<Entity, Integer> inventoryGroup = new HashMap<Entity, Integer>();
         
-        Font.draw("Inventory", g, 32, 32, 1);
-        Font.draw("---------", g, 32, 42, 1);
-        for (int i = 0; i < inventory.size(); i++)
+        for (Entity entity : inventory)
         {
-            int style = (currentColumn == 0 && i == currentItem ? 2 : 0);
-            Font.draw(inventory.get(i).getDescription(), g,
-                      32, 52 + i * 10, style);
+            Integer count = inventoryGroup.get(entity);
+            inventoryGroup.put(entity, (count == null ? 1 : count + 1));
         }
         
-        Font.draw("Recipes", g, size.width / 2, 32, 1);
-        Font.draw("-------", g, size.width / 2, 42, 1);
+        Graphics g = buffer.createGraphics();
+        int x = padding, y = padding;
+        
+        Font.draw("Inventory", g, x, y, FontStyle.Bold);
+        y += Font.getLineHeight();
+        Font.draw("---------", g, x, y, FontStyle.Bold);
+        y += Font.getLineHeight();
+        
+        int index = 0;
+        for (Map.Entry<Entity, Integer> cursor : inventoryGroup.entrySet())
+        {
+            int style = (currentColumn == 0 && index == currentItem ?
+                         FontStyle.Highlight : FontStyle.Normal);
+            
+            String text = "(" + cursor.getValue().toString() + ") " +
+                          cursor.getKey().getDescription();
+            Font.draw(text, g, x, y, style);
+            
+            y += Font.getLineHeight();
+            index++;
+        }
+        
+        x = size.width / 2;
+        y = padding;
+        
+        Font.draw("Recipes", g, x, y, FontStyle.Bold);
+        y += Font.getLineHeight();
+        Font.draw("-------", g, x, y, FontStyle.Bold);
+        y += Font.getLineHeight();
+        
         for (int i = 0; i < recipes.size(); i++)
         {
-            int style = (currentColumn == 1 && i == currentItem ? 2 : 0);
+            int style = (currentColumn == 1 && i == currentItem ?
+                         FontStyle.Highlight : FontStyle.Normal);
             Font.draw(recipes.get(i).getResult().getDescription(), g,
-                      size.width / 2, 52 + i * 10, style);
+                      x, y, style);
+            
+            y += Font.getLineHeight();
         }
         
         g.dispose();
     }
     
-    private void nextItem()
+    protected void nextItem()
     {        
         if (currentColumn == 0 && inventory != null && inventory.size() > 0)
         {
@@ -164,7 +193,7 @@ public class InventoryMenu extends Menu
         }
     }
     
-    private void previousItem()
+    protected void previousItem()
     {        
         if (currentColumn == 0 && inventory != null && inventory.size() > 0)
         {
@@ -199,7 +228,7 @@ public class InventoryMenu extends Menu
         }
     }
     
-    private void firstItem()
+    protected void firstItem()
     {
         if (currentColumn == 0)
         {
@@ -219,7 +248,7 @@ public class InventoryMenu extends Menu
         }
     }
     
-    private void nextList()
+    protected void nextList()
     {
         if (currentColumn < 1)
         {
@@ -233,7 +262,7 @@ public class InventoryMenu extends Menu
         firstItem();
     }
     
-    private void previousList()
+    protected void previousList()
     {
         if (currentColumn > 0)
         {
