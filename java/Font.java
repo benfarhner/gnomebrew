@@ -19,11 +19,42 @@ public class Font
      * Properties
      */
     
-    private static String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ-";
-    private static int charWidth = 8;
-    private static int charHeight = 8;
-    private static int charPaddingX = 0;
-    private static int charPaddingY = 2;
+    private static String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static Dimension size = new Dimension(8, 8);
+    private static Dimension padding = new Dimension(0, 2);
+    
+    /*
+     * Accessors
+     */
+    
+    public static Dimension getSize()
+    {
+        return size;
+    }
+    
+    public static Dimension getPadding()
+    {
+        return padding;
+    }
+    
+    /*
+     * Mutators
+     */
+    
+    public static void setCharacters(String characters)
+    {
+        Font.characters = new String(characters);
+    }
+    
+    public static void setSize(Dimension size)
+    {
+        Font.size = new Dimension(size);
+    }
+    
+    public static void setPadding(Dimension padding)
+    {
+        Font.padding = new Dimension(padding);
+    }
     
     /*
      * Public Methods
@@ -31,12 +62,12 @@ public class Font
     
     public static int getLineHeight()
     {
-        return charHeight + charPaddingY;
+        return size.height + padding.height;
     }
     
     public static int getWidth(String text)
     {
-        return text.length() * (charWidth + charPaddingX);
+        return text.length() * (size.width + padding.width);
     }
     
     public static void draw(String text,
@@ -61,34 +92,34 @@ public class Font
         
         for (int i = 0; i < text.length(); i++)
         {
-            int charIndex = characters.indexOf(text.charAt(i));
+            int index = characters.indexOf(text.charAt(i));
             
-            if (charIndex >= 0)
+            if (index >= 0)
             {
                 g.drawImage(Skin.getFont(),
-                            x + i * charWidth,
+                            x + i * (size.width + padding.width),
                             y,
-                            x + i * charWidth + charWidth,
-                            y + charHeight,
-                            charIndex * charWidth,
-                            charHeight * style,
-                            charIndex * charWidth + charWidth,
-                            charHeight * style + charHeight,
+                            x + i * (size.width + padding.width) + size.width,
+                            y + size.height,
+                            index * size.width,
+                            size.height * style,
+                            index * size.width + size.width,
+                            size.height * style + size.height,
                             null);
             }
             else if (text.charAt(i) == '_')
             {
-                charIndex = characters.indexOf('-');
+                index = characters.indexOf('-');
                 
                 g.drawImage(Skin.getFont(),
-                            x + i * charWidth,
-                            y + charHeight / 2,
-                            x + i * charWidth + charWidth,
-                            y + charHeight,
-                            charIndex * charWidth,
-                            charHeight * style,
-                            charIndex * charWidth + charWidth,
-                            charHeight * style + charHeight / 2,
+                            x + i * (size.width + padding.width),
+                            y + size.height / 2,
+                            x + i * (size.width + padding.width) + size.width,
+                            y + size.height,
+                            index * size.width,
+                            size.height * style,
+                            index * size.width + size.width,
+                            size.height * style + size.height / 2,
                             null);
             }
         }

@@ -6,21 +6,32 @@ Loads a Skin for the game.
 
 */
 
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.nio.*;
-import java.nio.charset.*;
-import java.nio.file.*;
-import java.util.*;
-import javax.imageio.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import javax.imageio.ImageIO;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class Skin
 {
     /*
+     * Constants
+     */
+    
+    private final static String DIRECTORY = "skins";
+    private final static String FILENAME = "skin.xml";
+    
+    /*
      * Properties
      */
     
+    private static String skinName;
     private static Dimension _tileSize;
     private static Color _backgroundColor;
     private static Color _foregroundColor;
@@ -72,113 +83,20 @@ public class Skin
      * Public Methods
      */
     
-    public static void load()
+    public static void load(String skinName)
     {
-        Path file = Paths.get("default.skin");
-        String delimiter = ",", partDelimiter = ";";
-        Charset charset = Charset.forName("UTF-8");
+        Skin.skinName = skinName;
+        Element root = Parser.parseFile(DIRECTORY, skinName, FILENAME);
         
-        try (BufferedReader reader = Files.newBufferedReader(file, charset))
+        if (root != null)
         {
-            String line = null;
-            
-            // Read first line to get tile size
-            if ((line = reader.readLine()) != null)
-            {
-                String[] parts = line.split(delimiter);
-                
-                if (parts.length == 2)
-                {
-                    _tileSize = new Dimension(Integer.valueOf(parts[0]), 
-                                              Integer.valueOf(parts[1]));
-                }
-                else
-                {
-                    _tileSize = new Dimension(16, 16);
-                }
-            }
-            
-            // Read second line to get background and foreground colors
-            if ((line = reader.readLine()) != null)
-            {
-                String[] parts = line.split(partDelimiter);
-                
-                if (parts.length == 3)
-                {
-                    _backgroundColor = createColorFromString(parts[0]);
-                    
-                    if (_backgroundColor == null)
-                    {
-                        _backgroundColor = Color.black;
-                    }
-                    
-                    _foregroundColor = createColorFromString(parts[1]);
-                    
-                    if (_foregroundColor == null)
-                    {
-                        _foregroundColor = Color.white;
-                    }
-                    
-                    _highlightColor = createColorFromString(parts[2]);
-                    
-                    if (_highlightColor == null)
-                    {
-                        _highlightColor = Color.yellow;
-                    }
-                    
-                }
-            }
-            
-            _entityImages = new HashMap<Integer, BufferedImage>();
-            
-            // Read each following line as an Entity skin
-            while ((line = reader.readLine()) != null)
-            {
-                String[] parts = line.split(partDelimiter);
-                
-                if (parts.length > 1)
-                {
-                    Integer type = Integer.valueOf(parts[0]);
-                    
-                    int index = 1;
-                    BufferedImage image = null;
-                    
-                    while (image == null && index < parts.length)
-                    {
-                        image = loadImage(parts[index]);
-                        index++;
-                    }
-                    
-                    if (image != null)
-                    {
-                        _entityImages.put(type, image);
-                    }
-                }
-            }
-        }
-        catch (IOException e)
-        {
-            System.err.format("IOException: %s%n", e);
-        }
-        
-        // Load font file
-        try
-        {
-            font = ImageIO.read(new File("font.png"));
-        }
-        catch (IOException e)
-        {
-            System.err.println("Oops, can't load font! " + e.toString());
-        }
-        
-        // Load menu background image
-        try
-        {
-            menuBackground = ImageIO.read(new File("menubg.png"));
-        }
-        catch (IOException e)
-        {
-            System.err.println("Oops, can't load menu background! " + e.toString());
+            loadTile(Parser.getLastElement(root, "tile"));
+            loadBackground(Parser.getLastElement(root, "background"));
+            loadForeground(Parser.getLastElement(root, "foreground"));
+            loadHighlight(Parser.getLastElement(root, "highlight"));
+            loadFont(Parser.getLastElement(root, "font"));
+            loadDialog(Parser.getLastElement(root, "dialog"));
+            loadEntities(Parser.getLastElement(root, "entities"));
         }
     }
     
@@ -186,38 +104,197 @@ public class Skin
      * Private Methods
      */
     
-    private static BufferedImage loadImage(String def)
+    private static void loadTile(Element element)
     {
-        BufferedImage image = null;
-        
-        if (def.length() > 0)
+        if (element == null)
         {
-            int defEnd = def.length() - 1;
+            return;
+        }
+        
+        if (element.hasAttribute("width") &&
+            element.hasAttribute("height"))
+        {
+            int width = Integer.parseInt(element.getAttribute("width"));
+            int height = Integer.parseInt(element.getAttribute("height"));
+            _tileSize = new Dimension(width, height);
+        }
+        else
+        {
+            // TODO: Store default size elsewhere
+            _tileSize = new Dimension(16, 16);
+        }
+    }
+    
+    private static void loadBackground(Element element)
+    {
+        if (element == null)
+        {
+            return;
+        }
+        
+        String rgb = element.getTextContent();
+        _backgroundColor = createColorFromString(rgb);
+    }
+    
+    private static void loadForeground(Element element)
+    {
+        if (element == null)
+        {
+            return;
+        }
+        
+        String rgb = element.getTextContent();
+        _foregroundColor = createColorFromString(rgb);
+    }
+    
+    private static void loadHighlight(Element element)
+    {
+        if (element == null)
+        {
+            return;
+        }
+        
+        String rgb = element.getTextContent();
+        _highlightColor = createColorFromString(rgb);
+    }
+    
+    private static void loadFont(Element element)
+    {
+        if (element == null)
+        {
+            return;
+        }
+        
+        // Load characters
+        Element characters = Parser.getLastElement(element, "characters");
+        if (characters != null)
+        {
+            Font.setCharacters(characters.getTextContent());
+        }
+        
+        // Load character properties
+        Element character = Parser.getLastElement(element, "character");
+        if (character != null)
+        {
+            Dimension size = new Dimension(0, 0);
             
-            // Determine if it is a character, RGB, or a path
-            if (def.charAt(0) == '\'' &&
-                def.charAt(defEnd) == '\'')
+            if (character.hasAttribute("width"))
             {
-                String character = def.substring(1, defEnd);
-                image = createImageFromCharacter(character);
+                size.width = Integer.parseInt(character.getAttribute("width"));
             }
-            else if (def.charAt(0) == '(' &&
-                def.charAt(defEnd) == ')')
+            if (character.hasAttribute("height"))
             {
-                Color color = createColorFromString(def);
-                image = createImageFromColor(color);
+                size.height = Integer.parseInt(character.getAttribute("height"));
+            }
+            
+            Font.setSize(size);
+            
+            Dimension padding = new Dimension(0, 0);
+            
+            if (character.hasAttribute("padding-x"))
+            {
+                padding.width = Integer.parseInt(character.getAttribute("padding-x"));
+            }
+            if (character.hasAttribute("padding-y"))
+            {
+                padding.height = Integer.parseInt(character.getAttribute("padding-y"));
+            }
+            
+            Font.setPadding(padding);
+        }
+        
+        // Load font image
+        Element image = Parser.getLastElement(element, "image");
+        if (image != null)
+        {
+            font = loadImage(image.getTextContent());
+        }
+    }
+    
+    private static void loadDialog(Element element)
+    {
+        if (element == null)
+        {
+            return;
+        }
+        
+        Element image = Parser.getLastElement(element, "image");
+        if (image != null)
+        {
+            menuBackground = loadImage(image.getTextContent());
+        }
+    }
+    
+    private static void loadEntities(Element element)
+    {
+        if (element == null)
+        {
+            return;
+        }
+        
+        _entityImages = new HashMap<Integer, BufferedImage>();
+        
+        NodeList nodes = element.getElementsByTagName("entity");
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            loadEntity((Element)(nodes.item(i)));
+        }
+    }
+    
+    private static void loadEntity(Element entity)
+    {
+        if (entity.hasAttribute("id"))
+        {
+            int type = Integer.parseInt(entity.getAttribute("id"));
+            BufferedImage image = null;
+            
+            Element node = Parser.getLastElement(entity, "image");
+            
+            if (node != null)
+            {
+                image = loadImage(node.getTextContent());
             }
             else
             {
-                try
+                node = Parser.getLastElement(entity, "color");
+                
+                if (node != null)
                 {
-                    image = ImageIO.read(new File(def));
+                    String rgb = node.getTextContent();
+                    Color color = createColorFromString(rgb);
+                    image = createImageFromColor(color);
                 }
-                catch (IOException e)
+                else
                 {
-                    System.err.println("Oops, can't load image '" + def + "'! " + e.toString());
+                    node = Parser.getLastElement(entity, "character");
+                    
+                    if (node != null)
+                    {
+                        String character = node.getTextContent();
+                        image = createImageFromCharacter(character);
+                    }
                 }
             }
+            
+            if (image != null)
+            {
+                _entityImages.put(type, image);
+            }
+        }
+    }
+    
+    private static BufferedImage loadImage(String fileName)
+    {
+        String path = Parser.getFullPath(DIRECTORY, Skin.skinName, fileName);
+        BufferedImage image = null;
+        
+        try
+        {
+            image = ImageIO.read(new File(path));
+        }
+        catch (IOException e)
+        {
+            System.err.format("Can't load image file: %s%n", e);
         }
         
         return image;
@@ -243,8 +320,6 @@ public class Skin
     
     private static BufferedImage createImageFromCharacter(String character)
     {
-        int leftPadding = _tileSize.width / 4;
-        int bottomPadding = _tileSize.height / 4;
         BufferedImage image = new BufferedImage(_tileSize.width,
                                                 _tileSize.height,
                                                 BufferedImage.TYPE_INT_RGB);
@@ -253,10 +328,10 @@ public class Skin
         g.setColor(_backgroundColor);
         g.fillRect(0, 0, _tileSize.width, _tileSize.height);
         
-        g.setColor(_foregroundColor);
-        g.drawString(character.substring(0, 1),
-                     leftPadding,
-                     _tileSize.height - 1 - bottomPadding);
+        Font.draw(character.substring(0, 1), g,
+                  (_tileSize.width - Font.getSize().width) / 2,
+                  (_tileSize.height - Font.getSize().height) / 2,
+                  FontStyle.Normal);
         
         return image;
     }
@@ -267,7 +342,7 @@ public class Skin
     private static Color createColorFromString(String rgb)
     {
         Color color = null;
-        String[] parts = rgb.substring(1, rgb.length() - 1).split(",");
+        String[] parts = rgb.split(",");
         
         if (parts.length == 3)
         {

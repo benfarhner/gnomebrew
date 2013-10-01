@@ -42,7 +42,7 @@ public class Dialog
                                    size.height,
                                    BufferedImage.TYPE_INT_ARGB);
         
-        renderBorder(size);
+        renderBackground(size);
         
         return buffer;
     }
@@ -56,7 +56,12 @@ public class Dialog
      * Protected Methods
      */
     
-    protected void renderBorder(Dimension size)
+    protected void renderBackground(Dimension size)
+    {
+        renderBackground(size, false);
+    }
+    
+    protected void renderBackground(Dimension size, boolean drawBorder)
     {
         BufferedImage bg = Skin.getMenuBackground();
         
@@ -72,11 +77,49 @@ public class Dialog
         g.fillRect(0, 0, size.width, size.height);
         g.setComposite(AlphaComposite.SrcOver);
         
-        // Calculate the width of each "tile" in the background image
+        // Calculate the width of the borders in the background image
         int width = bg.getWidth() / 3;
         
         // Clear the view so we don't have overlaid transparent layers
-        g.clearRect(0, 0, size.width, size.height);
+        //g.clearRect(0, 0, size.width, size.height);
+        
+        int startX = 0;
+        int startY = 0;
+        int endX = size.width;
+        int endY = size.height;
+        
+        if (drawBorder)
+        {
+            startX = width;
+            startY = width;
+            endX = size.width - width;
+            endY = size.height - width;
+        }
+        
+        // Fill in dialog background
+        for (int x = startX; x < endX; x++)
+        {
+            for (int y = startY; y < endY; y++)
+            {
+                g.drawImage(bg.getSubimage(width, width, 1, 1), null,
+                            x, y);
+            }
+        }
+        
+        if (drawBorder)
+        {
+            renderBorder(size, g);
+        }
+        
+        g.dispose();
+    }
+    
+    protected void renderBorder(Dimension size, Graphics2D g)
+    {
+        BufferedImage bg = Skin.getMenuBackground();
+        
+        // Calculate the width of the borders in the background image
+        int width = bg.getWidth() / 3;
         
         // Draw the border corners first
         g.drawImage(bg.getSubimage(0, 0, width, width), null, 0, 0);
@@ -88,36 +131,28 @@ public class Dialog
                     size.width - width, size.height - width);
         
         // Draw border sides
-        int sideWidth = size.width - width - width;
-        int sideHeight = size.height - width - width;
-        
-        for (int y = width; y <= sideHeight; y += width)
+        int endX = size.width - width;
+        for (int x = width; x < endX; x++)
         {
-            // Left border
-            g.drawImage(bg.getSubimage(0, width, width, width), null,
-                        0, y);
-            
-            // Right border
-            g.drawImage(bg.getSubimage(width * 2, width, width, width), null,
-                        size.width - width, y);
-        }
-        
-        for (int x = width; x <= sideWidth; x += width)
-        {
-            for (int y = width; y <= sideHeight; y += width)
-            {
-                // Fill center
-                g.drawImage(bg.getSubimage(width, width, width, width), null,
-                            x, y);
-            }
-            
             // Top border
-            g.drawImage(bg.getSubimage(width, 0, width, width), null,
+            g.drawImage(bg.getSubimage(width, 0, 1, width), null,
                         x, 0);
             
             // Bottom border
-            g.drawImage(bg.getSubimage(width, width * 2, width, width), null,
+            g.drawImage(bg.getSubimage(width, width * 2, 1, width), null,
                         x, size.height - width);
+        }
+        
+        int endY = size.height - width;
+        for (int y = width; y < endY; y++)
+        {
+            // Left border
+            g.drawImage(bg.getSubimage(0, width, width, 1), null,
+                        0, y);
+            
+            // Right border
+            g.drawImage(bg.getSubimage(width * 2, width, width, 1), null,
+                        size.width - width, y);
         }
         
         g.dispose();

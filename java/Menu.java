@@ -76,7 +76,7 @@ public class Menu extends Dialog
                                    size.height,
                                    BufferedImage.TYPE_INT_ARGB);
         
-        renderBorder(size);
+        renderBackground(size);
         renderItems(size, new Dimension(0, 0));
         
         return buffer;

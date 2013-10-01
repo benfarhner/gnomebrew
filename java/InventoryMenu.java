@@ -53,7 +53,7 @@ public class InventoryMenu extends Menu
                                    size.height,
                                    BufferedImage.TYPE_INT_ARGB);
         
-        renderBorder(size);
+        renderBackground(size, true);
         renderItems(size);
         
         return buffer;

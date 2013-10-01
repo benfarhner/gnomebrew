@@ -1,5 +1,0 @@
-Bim,Dom,Gob,Mip,Pol,Yit,Loe,Nes,Vig,Tor
-Een,Cal,Ara,Wer,Ori,Bef,Mil,Nit,Dep,Liv
-fat,wyde,groen,blue,yellow,auld,shy,round,box,quick
-stump,stick,stane,root,wyrm,boot,belly,bramble,eye
-picker,messer,snatcher,maker,render,raker,pincher,witcher,digger,tender

@@ -76,7 +76,7 @@ public class NewGnomeDialog extends Menu implements MenuListener
                                    size.height,
                                    BufferedImage.TYPE_INT_ARGB);
         
-        renderBorder(size);
+        renderBackground(size);
         renderUI(size);
         
         return buffer;
@@ -125,7 +125,7 @@ public class NewGnomeDialog extends Menu implements MenuListener
         switch (selection.getID())
         {
             case MENU_GENERATE:
-                gnome.setName(gnome.generateName());
+                gnome.setName(NameGenerator.generateName(gnome.getSex()));
                 name.setText(gnome.getName());
                 break;
             case MENU_STARTGAME:

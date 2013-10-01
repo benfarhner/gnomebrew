@@ -46,9 +46,6 @@ public class GameManager implements MenuListener, KeyListener
     {
         _running = true;
         
-        // Load game skin
-        Skin.load();
-        
         world = new World(257);
         player = new Being();
         

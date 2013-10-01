@@ -4,11 +4,7 @@ Being.java
 
 */
 
-import java.io.*;
-import java.nio.*;
-import java.nio.charset.*;
-import java.nio.file.*;
-import java.util.*;
+import java.util.ArrayList;
 
 public class Being extends Entity
 {
@@ -21,25 +17,17 @@ public class Being extends Entity
     private String mood;
     private ArrayList<Entity> inventory;
     
-    private ArrayList<String> maleNames;
-    private ArrayList<String> femaleNames;
-    private ArrayList<String> lastNameModifiers;
-    private ArrayList<String> lastNameNouns;
-    private ArrayList<String> lastNameVerbs;
-    
     /*
      * Constructors
      */
     
     public Being()
     {
-        loadNames();
-        
-        type = 0;
+        type = EntityType.Being;
         fetchable = false;
         
-        sex = generateSex();
-        name = generateName();
+        sex = Sex.Male;
+        name = NameGenerator.generateName(sex);
         mood = generateMood();
         inventory = new ArrayList<Entity>();
     }
@@ -113,8 +101,7 @@ public class Being extends Entity
     {
     }
     
-    // canBrew()
-    // Determines if this Being has the items in inventory to brew the recipe
+    // Determines if this Being has the right items in inventory to brew recipe
     public boolean canBrew(Recipe recipe)
     {
         ArrayList<Entity> ingredients;
@@ -128,8 +115,7 @@ public class Being extends Entity
         return ingredients.size() == 0;
     }
     
-    // brew()
-    // Brews the given recipe and returns the newly created Entity
+    // Brews recipe and adds the newly created Entity to inventory
     public void brew(Recipe recipe)
     {
         ArrayList<Entity> ingredients = recipe.getIngredients();
@@ -146,81 +132,8 @@ public class Being extends Entity
      * Private Methods
      */
     
-    public String generateName()
-    {
-        String name = "";
-        
-        Random rand = new Random((new Date()).getTime());
-        
-        if (sex == Sex.Female)
-        {
-            name = femaleNames.get(rand.nextInt(femaleNames.size())) + " ";
-        }
-        else
-        {
-            name = maleNames.get(rand.nextInt(maleNames.size())) + " ";
-        }
-        
-        String lastName = rand.nextInt(2) == 1 ?
-            (lastNameNouns.get(rand.nextInt(lastNameNouns.size())) +
-             lastNameVerbs.get(rand.nextInt(lastNameVerbs.size()))) :
-            (lastNameModifiers.get(rand.nextInt(lastNameModifiers.size())) +
-             lastNameNouns.get(rand.nextInt(lastNameNouns.size())));
-        
-        name += Character.toUpperCase(lastName.charAt(0)) + lastName.substring(1);
-        
-        return name;
-    }
-    
-    public int generateSex()
-    {
-        Random rand = new Random((new Date()).getTime());
-        return rand.nextInt(2);
-    }
-    
     public String generateMood()
     {
         return "";
-    }
-    
-    private void loadNames()
-    {
-        Path file = Paths.get("names.txt");
-        String delimiter = ",";
-        Charset charset = Charset.forName("UTF-8");
-        
-        try (BufferedReader reader = Files.newBufferedReader(file, charset))
-        {
-            String line = null;
-            
-            if ((line = reader.readLine()) != null)
-            {
-                maleNames = new ArrayList<String>(Arrays.asList(line.split(delimiter)));
-            }
-            
-            if ((line = reader.readLine()) != null)
-            {
-                femaleNames = new ArrayList<String>(Arrays.asList(line.split(delimiter)));
-            }
-            
-            if ((line = reader.readLine()) != null)
-            {
-                lastNameModifiers = new ArrayList<String>(Arrays.asList(line.split(delimiter)));
-            }
-            
-            if ((line = reader.readLine()) != null)
-            {
-                lastNameNouns = new ArrayList<String>(Arrays.asList(line.split(delimiter)));
-            }
-            
-            if ((line = reader.readLine()) != null)
-            {
-                lastNameVerbs = new ArrayList<String>(Arrays.asList(line.split(delimiter)));
-            }
-        }
-        catch (IOException e)
-        {
-            System.err.format("IOException: %s%n", e);
-        }
     }
 }

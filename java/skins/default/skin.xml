@@ -1,0 +1,39 @@
+<skin>
+    <tile width="16" height="16"></tile>
+    
+    <background>0,0,0</background>
+    <foreground>255,255,255</foreground>
+    <highlight>255,255,161</highlight>
+    
+    <font>
+        <characters>ABCDEFGHIJKLMNOPQRSTUVWXYZ-</characters>
+        <character width="8"
+                   height="8"
+                   padding-x="0"
+                   padding-y="2">
+        </character>
+        <image>images/font.png</image>
+    </font>
+    
+    <dialog>
+        <image>images/menubg.png</image>
+    </dialog>
+    
+    <entities>
+        <entity id="0">
+            <!--color>255,0,0</color-->
+            <character>A</character>
+        </entity>
+        <entity id="1">
+            <image>images/dirt.png</image>
+            <color>139,69,19</color>
+        </entity>
+        <entity id="2">
+            <image>images/stone.png</image>
+            <color>201,201,201</color>
+        </entity>
+        <entity id="3">
+            <color>0,196,0</color>
+        </entity>
+    </entities>
+</skin>

@@ -1,0 +1,56 @@
+<config>
+    <skin>default</skin>
+    <screen width="40" height="30"></screen>
+    <names>
+        <name position="first" sex="male">Bim</name>
+        <name position="first" sex="male">Dom</name>
+        <name position="first" sex="male">Gob</name>
+        <name position="first" sex="male">Mip</name>
+        <name position="first" sex="male">Pol</name>
+        <name position="first" sex="male">Yit</name>
+        <name position="first" sex="male">Loe</name>
+        <name position="first" sex="male">Nes</name>
+        <name position="first" sex="male">Vig</name>
+        <name position="first" sex="male">Tor</name>
+        <name position="first" sex="female">Een</name>
+        <name position="first" sex="female">Cal</name>
+        <name position="first" sex="female">Ara</name>
+        <name position="first" sex="female">Wer</name>
+        <name position="first" sex="female">Ori</name>
+        <name position="first" sex="female">Bef</name>
+        <name position="first" sex="female">Mil</name>
+        <name position="first" sex="female">Nit</name>
+        <name position="first" sex="female">Dep</name>
+        <name position="first" sex="female">Liv</name>
+        <name position="last" type="modifier">fat</name>
+        <name position="last" type="modifier">wyde</name>
+        <name position="last" type="modifier">groen</name>
+        <name position="last" type="modifier">blue</name>
+        <name position="last" type="modifier">yellow</name>
+        <name position="last" type="modifier">auld</name>
+        <name position="last" type="modifier">shy</name>
+        <name position="last" type="modifier">round</name>
+        <name position="last" type="modifier">box</name>
+        <name position="last" type="modifier">quick</name>
+        <name position="last" type="noun">stump</name>
+        <name position="last" type="noun">stick</name>
+        <name position="last" type="noun">stane</name>
+        <name position="last" type="noun">root</name>
+        <name position="last" type="noun">wyrm</name>
+        <name position="last" type="noun">boot</name>
+        <name position="last" type="noun">belly</name>
+        <name position="last" type="noun">bramble</name>
+        <name position="last" type="noun">eye</name>
+        <name position="last" type="noun">hole</name>
+        <name position="last" type="verb">picker</name>
+        <name position="last" type="verb">messer</name>
+        <name position="last" type="verb">snatcher</name>
+        <name position="last" type="verb">maker</name>
+        <name position="last" type="verb">render</name>
+        <name position="last" type="verb">raker</name>
+        <name position="last" type="verb">pincher</name>
+        <name position="last" type="verb">witcher</name>
+        <name position="last" type="verb">digger</name>
+        <name position="last" type="verb">tender</name>
+    </names>
+</config>
