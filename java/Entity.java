@@ -15,6 +15,7 @@ public class Entity implements Comparable<Entity>
     protected String description;
     protected GameTime age;
     protected boolean fetchable;
+    protected boolean consumable;
     
     /*
      * Constructors
@@ -27,6 +28,7 @@ public class Entity implements Comparable<Entity>
         description = "";
         age = new GameTime();
         fetchable = false;
+        consumable = true;
     }
     
     // DESTROY
@@ -67,6 +69,11 @@ public class Entity implements Comparable<Entity>
     public boolean isFetchable()
     {
         return fetchable;
+    }
+    
+    public boolean isConsumable()
+    {
+        return consumable;
     }
     
     /*

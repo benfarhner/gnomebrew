@@ -25,6 +25,7 @@ public class Being extends Entity
     {
         type = EntityType.Being;
         fetchable = false;
+        consumable = false;
         
         sex = Sex.Male;
         name = NameGenerator.generateName(sex);
@@ -122,7 +123,10 @@ public class Being extends Entity
         
         for (int i = 0; i < ingredients.size(); i++)
         {
-            inventory.remove(ingredients.get(i));
+            if (ingredients.get(i).isConsumable())
+            {
+                inventory.remove(ingredients.get(i));
+            }
         }
         
         inventory.add(recipe.getResult());

@@ -12,5 +12,6 @@ public class Dirt extends Entity
     {
         type = EntityType.Dirt;
         fetchable = false;
+        consumable = true;
     }
 }

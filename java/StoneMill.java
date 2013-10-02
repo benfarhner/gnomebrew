@@ -11,5 +11,6 @@ public class StoneMill extends Entity
         type = EntityType.StoneMill;
         description = "Stone Mill";
         fetchable = true;
+        consumable = false;
     }
 }

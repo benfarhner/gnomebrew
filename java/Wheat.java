@@ -13,5 +13,6 @@ public class Wheat extends Entity
         type = EntityType.Wheat;
         description = "Wheat";
         fetchable = true;
+        consumable = true;
     }
 }

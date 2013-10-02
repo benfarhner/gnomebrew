@@ -117,6 +117,7 @@ public class InventoryMenu extends Menu
         
         Graphics g = buffer.createGraphics();
         int x = padding, y = padding;
+        int style;
         
         Font.draw("Inventory", g, x, y, FontStyle.Bold);
         y += Font.getLineHeight();
@@ -126,8 +127,14 @@ public class InventoryMenu extends Menu
         int index = 0;
         for (Map.Entry<Entity, Integer> cursor : inventoryGroup.entrySet())
         {
-            int style = (currentColumn == 0 && index == currentItem ?
-                         FontStyle.Highlight : FontStyle.Normal);
+            if (currentColumn == 0 && index == currentItem)
+            {
+                style = FontStyle.Highlight;
+            }
+            else
+            {
+                style = FontStyle.Normal;
+            }
             
             String text = "(" + cursor.getValue().toString() + ") " +
                           cursor.getKey().getDescription();
@@ -147,8 +154,19 @@ public class InventoryMenu extends Menu
         
         for (int i = 0; i < recipes.size(); i++)
         {
-            int style = (currentColumn == 1 && i == currentItem ?
-                         FontStyle.Highlight : FontStyle.Normal);
+            if (currentColumn == 1 && i == currentItem)
+            {
+                style = FontStyle.Highlight;
+            }
+            else if (player.canBrew(recipes.get(i)))
+            {
+                style = FontStyle.Normal;
+            }
+            else
+            {
+                style = FontStyle.Disabled;
+            }
+            
             Font.draw(recipes.get(i).getResult().getDescription(), g,
                       x, y, style);
             

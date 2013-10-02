@@ -11,5 +11,6 @@ public class Stone extends Entity
         type = EntityType.Stone;
         description = "Stone";
         fetchable = true;
+        consumable = true;
     }
 }
