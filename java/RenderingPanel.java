@@ -33,9 +33,7 @@ public class RenderingPanel extends JPanel implements KeyListener
     public RenderingPanel(RenderableView view)
     {
         super();
-        
         setOpaque(false);
-        addKeyListener(this);
         
         setView(view);
     }
@@ -55,9 +53,8 @@ public class RenderingPanel extends JPanel implements KeyListener
     
     public void setView(RenderableView view)
     {
-        //removeKeyListener((KeyListener)this.view);
         this.view = view;
-        //addKeyListener((KeyListener)view);
+        
         if (this.view != null)
         {
             this.view.update();
@@ -73,7 +70,15 @@ public class RenderingPanel extends JPanel implements KeyListener
     
     public void render()
     {
-        repaint();
+        new Thread()
+        {
+            public void run()
+            {
+                System.err.print(System.currentTimeMillis() / 1000);
+                System.err.println(" repaint()");
+                repaint();
+            }
+        }.run();
     }
     
     public void paintComponent(Graphics g)
@@ -124,14 +129,29 @@ public class RenderingPanel extends JPanel implements KeyListener
      * KeyListener Methods
      */
     
-    public void keyTyped(KeyEvent e) { }
+    public void keyTyped(KeyEvent e)
+    {
+        if (this.view != null)
+        {
+            this.view.keyTyped(e);
+        }
+    }
     
     public void keyPressed(KeyEvent e)
     {
-        //repaint();
+        if (this.view != null)
+        {
+            this.view.keyPressed(e);
+        }
     }
     
-    public void keyReleased(KeyEvent e) { }
+    public void keyReleased(KeyEvent e)
+    {
+        if (this.view != null)
+        {
+            this.view.keyReleased(e);
+        }
+    }
     
     /*
      * Private Methods

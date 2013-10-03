@@ -15,7 +15,7 @@ public class GameManager implements MenuListener, KeyListener
      * Properties
      */
     
-    private boolean _running;
+    private boolean running;
     
     private World world;
     private Being player;
@@ -44,7 +44,8 @@ public class GameManager implements MenuListener, KeyListener
     
     public GameManager()
     {
-        _running = true;
+        // Load configuration first
+        Config.load();
         
         world = new World(257);
         player = new Being();
@@ -61,7 +62,7 @@ public class GameManager implements MenuListener, KeyListener
         panel = new RenderingPanel();
         panel.setPreferredSize(new Dimension(width, height));
         panel.addKeyListener(this);
-        window.add(panel);
+        window.add(panel);  w
         
         Menu mainMenu = new Menu();
         mainMenu.addMenuListener(this);
@@ -91,16 +92,38 @@ public class GameManager implements MenuListener, KeyListener
         panel.requestFocus();
     }
     
-    public boolean update()
+    /*
+     * Accessors
+     */
+    
+    public boolean isRunning()
     {
-        /*
-        try
+        return running;
+    }
+    
+    /*
+     * Public Methods
+     */
+    
+    public void start()
+    {
+        if (!running)
         {
-            Thread.sleep(1000 / FPS);
+            running = true;
+            
+            // Initiate game loop
+            Thread loopThread = new Thread(new GameLoop(this));
+            loopThread.start();
         }
-        catch (InterruptedException e) { }
-        */
-        return _running;
+    }
+    
+    public void update(long ms)
+    {
+    }
+    
+    public void render()
+    {
+        panel.render();
     }
     
     /*
@@ -134,13 +157,12 @@ public class GameManager implements MenuListener, KeyListener
     
     public void keyTyped(KeyEvent e)
     {
-        panel.getView().keyTyped(e);
+        panel.keyTyped(e);
     }
     
     public void keyPressed(KeyEvent e)
     {
-        panel.getView().keyPressed(e);
-        panel.render();
+        panel.keyPressed(e);
     }
     
     public void keyReleased(KeyEvent e)
@@ -164,8 +186,7 @@ public class GameManager implements MenuListener, KeyListener
             panel.setView(gameView);
         }
         
-        panel.getView().keyReleased(e);
-        panel.render();
+        panel.keyReleased(e);
     }
     
     /*

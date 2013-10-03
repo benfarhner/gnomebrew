@@ -15,11 +15,9 @@ public class Gnomebrew extends javax.swing.JFrame
         java.awt.EventQueue.invokeLater(new Runnable()
         {
             public void run()
-            {
-                // Load configuration first
-                Config.load();
-                
+            {                
                 GameManager manager = new GameManager();
+                manager.start();
             }
         });
     }
