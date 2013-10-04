@@ -17,6 +17,7 @@ public class Dialog
      * Properties
      */
     
+    protected BufferedImage background;
     protected BufferedImage buffer;
     protected int padding = 32;
     
@@ -26,6 +27,7 @@ public class Dialog
     
     public Dialog()
     {
+        renderBackground(Config.getScreenSize());
     }
     
     /*
@@ -42,7 +44,9 @@ public class Dialog
                                    size.height,
                                    BufferedImage.TYPE_INT_ARGB);
         
-        renderBackground(size);
+        Graphics g = buffer.createGraphics();
+        g.drawImage(background, 0, 0, null);
+        g.dispose();
         
         return buffer;
     }
@@ -71,7 +75,11 @@ public class Dialog
             return;
         }
         
-        Graphics2D g = buffer.createGraphics();
+        background = new BufferedImage(Config.getScreenSize().width,
+                                       Config.getScreenSize().height,
+                                       BufferedImage.TYPE_INT_ARGB);
+        
+        Graphics2D g = background.createGraphics();
         g.setComposite(AlphaComposite.Clear);
         g.setBackground(new Color(255, 255, 255, 0));
         g.fillRect(0, 0, size.width, size.height);

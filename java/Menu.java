@@ -27,9 +27,9 @@ public class Menu extends Dialog
      */
     
     public Menu()
-    {        
+    {
+        super();
         this.items = new ArrayList<MenuItem>();
-        
         this.listeners = new ArrayList<MenuListener>();
     }
     
@@ -72,11 +72,7 @@ public class Menu extends Dialog
     
     public BufferedImage render(Dimension size)
     {
-        buffer = new BufferedImage(size.width,
-                                   size.height,
-                                   BufferedImage.TYPE_INT_ARGB);
-        
-        renderBackground(size);
+        super.render(size);
         renderItems(size, new Dimension(0, 0));
         
         return buffer;

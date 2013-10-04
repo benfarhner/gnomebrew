@@ -23,7 +23,8 @@ public class Config
      * Properties
      */
     
-    private static Dimension screenSize = new Dimension(40, 30);
+    private static Dimension screenSize = new Dimension(640, 480);
+    private static Dimension screenTileSize = new Dimension(40, 30);
     
     /*
      * Accessors
@@ -32,6 +33,11 @@ public class Config
     public static Dimension getScreenSize()
     {
         return screenSize;
+    }
+    
+    public static Dimension getScreenTileSize()
+    {
+        return screenTileSize;
     }
     
     /*
@@ -76,9 +82,10 @@ public class Config
         {
             int width = Integer.parseInt(element.getAttribute("width"));
             int height = Integer.parseInt(element.getAttribute("height"));
-            screenSize = new Dimension(width, height);
+            screenTileSize = new Dimension(width, height);
+            screenSize = new Dimension(width * Skin.getTileSize().width,
+                                       height * Skin.getTileSize().height);
         }
-        
     }
     
     private static void loadNames(Element names)

@@ -74,9 +74,10 @@ public class RenderingPanel extends JPanel implements KeyListener
         {
             public void run()
             {
-                System.err.print(System.currentTimeMillis() / 1000);
-                System.err.println(" repaint()");
-                repaint();
+                paintImmediately(0,
+                                 0,
+                                 getPreferredSize().width,
+                                 getPreferredSize().height);
             }
         }.run();
     }

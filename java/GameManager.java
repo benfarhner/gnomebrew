@@ -50,8 +50,8 @@ public class GameManager implements MenuListener, KeyListener
         world = new World(257);
         player = new Being();
         
-        int width = 40 * Skin.getTileSize().width;
-        int height = 30 * Skin.getTileSize().height;
+        int width = Config.getScreenSize().width;
+        int height = Config.getScreenSize().height;
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         
         window = new JFrame();
@@ -62,7 +62,7 @@ public class GameManager implements MenuListener, KeyListener
         panel = new RenderingPanel();
         panel.setPreferredSize(new Dimension(width, height));
         panel.addKeyListener(this);
-        window.add(panel);  w
+        window.add(panel);
         
         Menu mainMenu = new Menu();
         mainMenu.addMenuListener(this);

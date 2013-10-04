@@ -35,6 +35,8 @@ public class NewGnomeDialog extends Menu implements MenuListener
     
     public NewGnomeDialog()
     {
+        renderBackground(Config.getScreenSize());
+        
         gnome = new Being();
         
         sex = new SwitchableMenuItem(MENU_SEX,
@@ -76,7 +78,10 @@ public class NewGnomeDialog extends Menu implements MenuListener
                                    size.height,
                                    BufferedImage.TYPE_INT_ARGB);
         
-        renderBackground(size);
+        Graphics g = buffer.createGraphics();
+        g.drawImage(background, 0, 0, null);
+        g.dispose();
+        
         renderUI(size);
         
         return buffer;

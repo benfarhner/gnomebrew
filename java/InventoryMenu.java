@@ -30,6 +30,7 @@ public class InventoryMenu extends Menu
     public InventoryMenu(Being player, ArrayList<Recipe> recipes)
     {
         super();
+        renderBackground(Config.getScreenSize(), true);
         
         this.player = player;
         this.recipes = recipes;
@@ -49,11 +50,7 @@ public class InventoryMenu extends Menu
     
     public BufferedImage render(Dimension size)
     {
-        buffer = new BufferedImage(size.width,
-                                   size.height,
-                                   BufferedImage.TYPE_INT_ARGB);
-        
-        renderBackground(size, true);
+        super.render(size);
         renderItems(size);
         
         return buffer;

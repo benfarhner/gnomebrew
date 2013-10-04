@@ -54,6 +54,7 @@ public class GameLoop implements Runnable
             if (fpsTime >= 1000 / TARGETFPS)
             {
                 manager.render();
+                //System.err.println(fpsTime);
                 fpsTime = 0;
             }
             

@@ -32,7 +32,7 @@ public class Skin
      */
     
     private static String skinName;
-    private static Dimension _tileSize;
+    private static Dimension _tileSize = new Dimension(16, 16);
     private static Color _backgroundColor;
     private static Color _foregroundColor;
     private static Color _highlightColor;
@@ -117,11 +117,6 @@ public class Skin
             int width = Integer.parseInt(element.getAttribute("width"));
             int height = Integer.parseInt(element.getAttribute("height"));
             _tileSize = new Dimension(width, height);
-        }
-        else
-        {
-            // TODO: Store default size elsewhere
-            _tileSize = new Dimension(16, 16);
         }
     }
     
