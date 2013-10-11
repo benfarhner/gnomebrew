@@ -8,9 +8,11 @@ public class StoneMill extends Entity
 {
     public StoneMill()
     {
-        type = EntityType.StoneMill;
+        super();
+        type = Entity.Type.STONEMILL;
         description = "Stone Mill";
-        fetchable = true;
-        consumable = false;
+        
+        attributes.clear();
+        attributes.add(Entity.Attribute.FETCHABLE);
     }
 }

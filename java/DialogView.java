@@ -30,9 +30,9 @@ public class DialogView extends RenderableView
      * Public Methods
      */
     
-    public void update()
+    public void update(long ms)
     {
-        dialog.update();
+        dialog.update(ms);
     }
     
     public BufferedImage render(Dimension size)

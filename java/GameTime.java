@@ -21,7 +21,7 @@ public class GameTime implements Comparable<GameTime>
      * Properties
      */
     
-    private long seconds;
+    private long milliseconds;
     
     /*
      * Constructors
@@ -29,81 +29,101 @@ public class GameTime implements Comparable<GameTime>
     
     public GameTime()
     {
-        seconds = 0;
+        milliseconds = 0;
+    }
+    
+    public GameTime(long milliseconds)
+    {
+        this();
+        
+        if (milliseconds > 0)
+        {
+            this.milliseconds = milliseconds;
+        }
     }
     
     public GameTime(GameTime other)
     {
-        seconds = other.seconds;
+        milliseconds = other.milliseconds;
     }
     
     /*
      * Accessors
      */
     
+    public long getMilliseconds()
+    {
+        return milliseconds % 1000L;
+    }
+    
     public long getSeconds()
     {
-        return seconds % 60L;
+        return milliseconds / 1000L % 60L;
     }
     
     public long getMinutes()
     {
-        return seconds / 60L % 60L;
+        return milliseconds / 60000L % 60L;
     }
     
     public long getHours()
     {
-        return seconds / 3600L % 24L;
+        return milliseconds / 3600000L % 24L;
     }
     
     public long getDays()
     {
-        return seconds / 86400L % 30L;
+        return milliseconds / 86400000L % 30L;
     }
     
     public long getMonths()
     {
-        return seconds / 2592000L % 12L;
+        return milliseconds / 2592000000L % 12L;
     }
     
     public long getSeasons()
     {
-        return seconds / 7776000L % 4L;
+        return milliseconds / 7776000000L % 4L;
     }
     
     public long getYears()
     {
-        return seconds / 31104000L;
+        return milliseconds / 31104000000L;
+    }
+    
+    public long getTotalMilliseconds()
+    {
+        return milliseconds;
     }
     
     public long getTotalSeconds()
     {
-        return seconds;
+        return milliseconds / 1000L;
     }
     
     public long getTotalMinutes()
     {
-        return seconds / 60L;
+        return milliseconds / 60000L;
     }
     
     public long getTotalHours()
     {
-        return seconds / 3600L;
+        return milliseconds / 3600000L;
     }
     
     public long getTotalDays()
     {
-        return seconds / 86400L;
+        return milliseconds / 86400000L;
     }
     
     public long getTotalMonths()
     {
-        return seconds / 2592000L;
+        return milliseconds / 2592000000L;
     }
     
     public long getTotalSeasons()
     {
-        return seconds / 7776000L;
+        return milliseconds / 7776000000L;
     }
     
     public long getTotalYears()
@@ -115,6 +135,16 @@ public class GameTime implements Comparable<GameTime>
      * Mutators
      */
     
+    public void addMillisecond()
+    {
+        addMilliseconds(1L);
+    }
+    
+    public void addMilliseconds(long milliseconds)
+    {
+        this.milliseconds += milliseconds;
+    }
+    
     public void addSecond()
     {
         addSeconds(1L);
@@ -122,7 +152,7 @@ public class GameTime implements Comparable<GameTime>
     
     public void addSeconds(long seconds)
     {
-        this.seconds += seconds;
+        milliseconds += (seconds * 1000L);
     }
     
     public void addMinute()
@@ -132,7 +162,7 @@ public class GameTime implements Comparable<GameTime>
     
     public void addMinutes(long minutes)
     {
-        seconds += (minutes * 60L);
+        milliseconds += (minutes * 60000L);
     }
     
     public void addHour()
@@ -142,7 +172,7 @@ public class GameTime implements Comparable<GameTime>
     
     public void addHours(long hours)
     {
-        seconds += (hours * 3600L);
+        milliseconds += (hours * 3600000L);
     }
     
     public void addDay()
@@ -152,7 +182,7 @@ public class GameTime implements Comparable<GameTime>
     
     public void addDays(long days)
     {
-        seconds += (days * 86400L);
+        milliseconds += (days * 86400000L);
     }
     
     public void addMonth()
@@ -162,7 +192,7 @@ public class GameTime implements Comparable<GameTime>
     
     public void addMonths(long months)
     {
-        seconds += (months * 2592000L);
+        milliseconds += (months * 2592000000L);
     }
     
     public void addSeason()
@@ -172,7 +202,7 @@ public class GameTime implements Comparable<GameTime>
     
     public void addSeasons(long seasons)
     {
-        seconds += (seasons * 7776000L);
+        milliseconds += (seasons * 7776000000L);
     }
     
     public void addYear()
@@ -182,7 +212,7 @@ public class GameTime implements Comparable<GameTime>
     
     public void addYears(long years)
     {
-        seconds += (years * 31104000L);
+        milliseconds += (years * 31104000000L);
     }
     
     /*
@@ -193,7 +223,7 @@ public class GameTime implements Comparable<GameTime>
     {
         if (other instanceof GameTime)
         {
-            return seconds == ((GameTime) other).seconds;
+            return milliseconds == ((GameTime) other).milliseconds;
         }
         
         return false;
@@ -201,23 +231,24 @@ public class GameTime implements Comparable<GameTime>
     
     public int hashCode()
     {
-        return (int)seconds;
+        return (int)milliseconds;
     }
     
     public int compareTo(GameTime other)
     {
-        return (int)seconds - (int)other.seconds;
+        return (int)milliseconds - (int)other.milliseconds;
     }
     
     public String toString()
     {
-        return String.format("%d %04d-%02d-%02d %02d:%02d:%02d",
+        return String.format("%d %04d-%02d-%02d %02d:%02d:%02d.%04d",
                              getSeasons(),
                              getYears(),
                              getMonths(),
                              getDays(),
                              getHours(),
                              getMinutes(),
-                             getSeconds());
+                             getSeconds(),
+                             getMilliseconds());
     }
 }

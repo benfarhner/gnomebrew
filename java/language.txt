@@ -1,0 +1,49 @@
+﻿The Gnomes of Gnomebrew naturally speak Gnomish. Of Gnomish, there are 2 main dialects, both derived from Old Gnomish: Northern Gnomish and Southern Gnomish (as we call them in English).
+
+# Old Gnomish
+Old Gnomish is a very ancient language that is rarely seen in Gnomebrew, except perhaps in the occasional landmark or place name.
+
+## Phonology
+| Grapheme | IPA |
+| -------- | --- |
+| a        | /æ/ |
+| e        | /e/ |
+| i        | /ɪ/ |
+| o        | /ɑ/ |
+| oo       | /o/ |
+| u        | /ʌ/ |
+| uu       | /u/ |
+| y        | /i/ |
+| b        | /b/ |
+| bb       | /p/ |
+| d        | /d/ |
+| dd       | /t/ |
+| g        | /g/ |
+| gg       | /k/ |
+| v        | /v/ |
+| vv       | /f/ |
+| n        | /n/ |
+| nn       | /m/ |
+| r        | /ɹ/ |
+
+## Orthography
+
+## Syntax
+The structure of Old Gnomish sentences is, generally, VSO (verb-subject-object). Adjectives come after nouns and adverbs come after verbs.
+
+# Northern Gnomish
+The Gnomes of the North speak a distinct dialect derived from Old Gnomish and developed over centuries of living in the cold North Gardens.
+
+# Southern Gnomish
+The language of the Gnomes of the South is equally distinct and yet still derived from Old Gnomish. In the warmer South Gardens, these Gnomes developed their own words and colloquialisms to fit their environment.
+
+# Lexicon
+| Old Gnomish | Northern Gnomish | Southern Gnomish | Meaning |
+| ----------- | ---------------- | ---------------- | ------- |
+| Binn        | Pin              | Bym              | (name)  |
+| Gob         | Gop              | Yob              | (name)  |
+| Pool        | Poor             | Pol              | (name)  |
+| Vvig        | Vigg             | Vvidd            | (name)  |
+| Ddoor       | Ddoor            | Dol              | (name)  |
+| Bevv        | Piv              | Bivv             | (name)  |
+| groog       | groogg           | grog             | ?       |

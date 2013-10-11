@@ -66,10 +66,6 @@ public class Menu extends Dialog
      * Public Methods
      */
     
-    public void update()
-    {
-    }
-    
     public BufferedImage render(Dimension size)
     {
         super.render(size);
@@ -123,7 +119,7 @@ public class Menu extends Dialog
     protected void renderItems(Dimension size, Dimension offset)
     {
         Graphics g = buffer.createGraphics();
-        int style;
+        Font.Style style;
         boolean isCurrentItem;
         MenuItem item;
         String text;
@@ -136,15 +132,15 @@ public class Menu extends Dialog
             
             if (isCurrentItem)
             {
-                style = FontStyle.Highlight;
+                style = Font.Style.HIGHLIGHT;
             }
             else if (items.get(i).isEnabled())
             {
-                style = FontStyle.Normal;
+                style = Font.Style.NORMAL;
             }
             else
             {
-                style = FontStyle.Disabled;
+                style = Font.Style.DISABLED;
             }
             
             switch (item.getAlignment())
@@ -172,7 +168,7 @@ public class Menu extends Dialog
                 
                 x += Font.getWidth(eItem.getLabel());
                 text = eItem.getText() + (isCurrentItem ? "_" : "");
-                Font.draw(text, g, x, y, FontStyle.Normal);
+                Font.draw(text, g, x, y, Font.Style.NORMAL);
             }
             else if (item instanceof SwitchableMenuItem)
             {
@@ -189,11 +185,11 @@ public class Menu extends Dialog
                     
                     if (option == currentOption)
                     {
-                        style = FontStyle.Bold;
+                        style = Font.Style.BOLD;
                     }
                     else
                     {
-                        style = FontStyle.Normal;
+                        style = Font.Style.NORMAL;
                     }
                     
                     Font.draw(text, g, x, y, style);

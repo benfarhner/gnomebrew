@@ -25,6 +25,7 @@ public class Config
     
     private static Dimension screenSize = new Dimension(640, 480);
     private static Dimension screenTileSize = new Dimension(40, 30);
+    private static double clockSpeed = 1;
     
     /*
      * Accessors
@@ -40,6 +41,11 @@ public class Config
         return screenTileSize;
     }
     
+    public static double getClockSpeed()
+    {
+        return clockSpeed;
+    }
+    
     /*
      * Public Methods
      */
@@ -52,6 +58,7 @@ public class Config
         {
             loadSkin(Parser.getLastElement(root, "skin"));
             loadScreen(Parser.getLastElement(root, "screen"));
+            loadClock(Parser.getLastElement(root, "clock"));
             loadNames(Parser.getLastElement(root, "names"));
         }
     }
@@ -85,6 +92,19 @@ public class Config
             screenTileSize = new Dimension(width, height);
             screenSize = new Dimension(width * Skin.getTileSize().width,
                                        height * Skin.getTileSize().height);
+        }
+    }
+    
+    private static void loadClock(Element element)
+    {
+        if (element == null)
+        {
+            return;
+        }
+        
+        if (element.hasAttribute("speed"))
+        {
+            clockSpeed = Double.parseDouble(element.getAttribute("speed"));
         }
     }
     

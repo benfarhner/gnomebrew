@@ -4,18 +4,58 @@ Entity.java
 
 */
 
-public class Entity implements Comparable<Entity>
-{    
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.ListIterator;
+
+public class Entity implements Comparable<Entity>, Updateable
+{
+    /*
+     * Enumerations
+     */
+    
+    public enum Type
+    {
+        UNKNOWN(-1),
+        BEING(0),
+        DIRT(1),
+        STONE(2),
+        WHEAT(3),
+        STONEMILL(4);
+        
+        private int id;
+        
+        private Type(int id)
+        {
+            this.id = id;
+        }
+        
+        public int getID()
+        {
+            return id;
+        }
+    }
+    
+    public enum Attribute
+    {
+        FETCHABLE,
+        CONSUMABLE
+    }
+    
     /*
      * Properties
      */
     
-    protected int type;
+    protected Type type;
     protected Location location;
+    protected Direction direction;
+    protected double speed; // in "tiles per second"
     protected String description;
     protected GameTime age;
-    protected boolean fetchable;
-    protected boolean consumable;
+    protected HashSet<Attribute> attributes;
+    protected ArrayList<EntityState> states;
+    protected ListIterator<EntityState> stateCursor;
+    protected EntityState currentState;
     
     /*
      * Constructors
@@ -23,16 +63,24 @@ public class Entity implements Comparable<Entity>
     
     public Entity()
     {
-        type = 0;
+        type = Type.UNKNOWN;
         location = new Location(0, 0);
+        direction = Direction.North;
+        speed = 0;
         description = "";
         age = new GameTime();
-        fetchable = false;
-        consumable = true;
+        
+        attributes = new HashSet<Attribute>();
+        attributes.add(Attribute.CONSUMABLE);
+        
+        states = new ArrayList<EntityState>();
+        states.add(new EntityState(0, description));
+        stateCursor = states.listIterator();
+        currentState = stateCursor.next();
     }
     
     // DESTROY
-    public Entity(int type)
+    public Entity(Type type)
     {
         this();
         
@@ -43,15 +91,21 @@ public class Entity implements Comparable<Entity>
     {
         type = copy.type;
         location = new Location(copy.location);
+        direction = new Direction(copy.direction);
+        speed = copy.speed;
         description = copy.description;
-        fetchable = copy.fetchable;
+        age = new GameTime(copy.age);
+        attributes = new HashSet<Attribute>(copy.attributes);
+        states = new ArrayList<EntityState>(copy.states);
+        stateCursor = states.listIterator();
+        currentState = stateCursor.next();
     }
     
     /*
      * Accessors
      */
     
-    public int getType()
+    public Type getType()
     {
         return type;
     }
@@ -61,19 +115,29 @@ public class Entity implements Comparable<Entity>
         return location;
     }
     
+    public Direction getDirection()
+    {
+        return direction;
+    }
+    
+    public double getSpeed()
+    {
+        return speed;
+    }
+    
     public String getDescription()
     {
         return description;
     }
     
-    public boolean isFetchable()
+    public boolean hasAttribute(Attribute attribute)
     {
-        return fetchable;
+        return attributes.contains(attribute);
     }
     
-    public boolean isConsumable()
+    public EntityState getState()
     {
-        return consumable;
+        return currentState;
     }
     
     /*
@@ -82,30 +146,47 @@ public class Entity implements Comparable<Entity>
     
     public boolean equals(Object other)
     {
-        if (other instanceof Entity)
+        if (other == this)
         {
-            return type == ((Entity) other).type;
+            return true;
         }
         
-        return false;
+        if (!(other instanceof Entity))
+        {
+            return false;
+        }
+        
+        return type.getID() == ((Entity)other).type.getID();
     }
     
     public int hashCode()
     {
-        return type;
+        return type.getID();
     }
     
     public int compareTo(Entity other)
     {
-        return type - other.type;
+        return type.getID() - other.type.getID();
     }
     
-    public void update()
+    public void update(long ms)
     {
+        age.addMilliseconds(ms);
     }
     
-    public void move(Location.Direction direction)
+    public void turn(Direction direction)
     {
-        location.move(direction);
+        this.direction = new Direction(direction);
+    }
+    
+    public void move(double distance)
+    {
+        location.move(this.direction, distance);
+    }
+    
+    public void move(Direction direction, double distance)
+    {
+        turn(direction);
+        move(distance);
     }
 }

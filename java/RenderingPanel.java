@@ -11,7 +11,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-public class RenderingPanel extends JPanel implements KeyListener
+public class RenderingPanel extends JPanel implements KeyListener, Updateable
 {
     /*
      * Properties
@@ -55,11 +55,6 @@ public class RenderingPanel extends JPanel implements KeyListener
     {
         this.view = view;
         
-        if (this.view != null)
-        {
-            this.view.update();
-        }
-        
         // Store previous rendered view
         oldBuffer = copyImage(buffer);
     }
@@ -67,6 +62,14 @@ public class RenderingPanel extends JPanel implements KeyListener
     /*
      * Public Methods
      */
+    
+    public void update(long ms)
+    {
+        if (view != null)
+        {
+            view.update(ms);
+        }
+    }
     
     public void render()
     {

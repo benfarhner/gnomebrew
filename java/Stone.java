@@ -8,9 +8,12 @@ public class Stone extends Entity
 {
     public Stone()
     {
-        type = EntityType.Stone;
+        super();
+        type = Entity.Type.STONE;
         description = "Stone";
-        fetchable = true;
-        consumable = true;
+        
+        attributes.clear();
+        attributes.add(Entity.Attribute.FETCHABLE);
+        attributes.add(Entity.Attribute.CONSUMABLE);
     }
 }

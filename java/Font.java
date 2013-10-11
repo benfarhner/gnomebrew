@@ -14,7 +14,31 @@ import java.io.*;
 import javax.imageio.*;
 
 public class Font
-{    
+{
+    /*
+     * Enumerations
+     */
+    
+    public enum Style
+    {
+        NORMAL(0),
+        BOLD(1),
+        HIGHLIGHT(2),
+        DISABLED(3);
+        
+        private int value;
+        
+        private Style(int value)
+        {
+            this.value = value;
+        }
+        
+        public int getValue()
+        {
+            return value;
+        }
+    }
+    
     /*
      * Properties
      */
@@ -74,16 +98,10 @@ public class Font
                             Graphics g,
                             int x,
                             int y,
-                            int style)
+                            Style style)
     {
         // Make sure font is available
         if (Skin.getFont() == null)
-        {
-            return;
-        }
-        
-        // Make sure style is valid so we don't go out of bounds
-        if (!FontStyle.isValid(style))
         {
             return;
         }
@@ -102,9 +120,9 @@ public class Font
                             x + i * (size.width + padding.width) + size.width,
                             y + size.height,
                             index * size.width,
-                            size.height * style,
+                            size.height * style.getValue(),
                             index * size.width + size.width,
-                            size.height * style + size.height,
+                            size.height * style.getValue() + size.height,
                             null);
             }
             else if (text.charAt(i) == '_')
@@ -117,11 +135,31 @@ public class Font
                             x + i * (size.width + padding.width) + size.width,
                             y + size.height,
                             index * size.width,
-                            size.height * style,
+                            size.height * style.getValue(),
                             index * size.width + size.width,
-                            size.height * style + size.height / 2,
+                            size.height * style.getValue() + size.height / 2,
                             null);
             }
+        }
+    }
+    
+    public static void drawString(String text,
+                                  Graphics g,
+                                  int x,
+                                  int y)
+    {
+        g.setColor(Skin.getBackgroundColor());
+        g.fillRect(x,
+                   y,
+                   getWidth(text),
+                   y + size.height);
+        g.setColor(Skin.getForegroundColor());
+        
+        for (int i = 0; i < text.length(); i++)
+        {
+            g.drawString(text.substring(i, i + 1),
+                         x + i * (size.width + padding.width),
+                         y + size.height + padding.height);
         }
     }
 }

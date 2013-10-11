@@ -6,7 +6,7 @@ Tile.java
 
 import java.util.*;
 
-public class Tile
+public class Tile implements Updateable
 {
     /*
      * Properties
@@ -26,6 +26,14 @@ public class Tile
     /*
      * Public Methods
      */
+    
+    public void update(long ms)
+    {
+        for (int i = 0; i < entities.size(); i++)
+        {
+            entities.get(i).update(ms);
+        }
+    }
     
     public void pushEntity(Entity entity)
     {

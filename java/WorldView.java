@@ -19,8 +19,8 @@ public class WorldView extends RenderableView
      */
     
     private BufferedImage view;
-    private World _world;
-    private Being _player;
+    private World world;
+    private Being player;
     
     /*
      * Constructors
@@ -28,17 +28,13 @@ public class WorldView extends RenderableView
     
     public WorldView(World world, Being player)
     {
-        _world = world;
-        _player = player;
+        this.world = world;
+        this.player = player;
     }
     
     /*
      * Public Methods
      */
-    
-    public void update()
-    {
-    }
     
     public BufferedImage render(Dimension size)
     {
@@ -51,25 +47,25 @@ public class WorldView extends RenderableView
         
         int width = size.width / Skin.getTileSize().width;
         int height = size.height / Skin.getTileSize().height;
-        int topLeftX = _player.getLocation().getX() - (width / 2);
-        int topLeftY = _player.getLocation().getY() - (height / 2);
+        int topLeftX = player.getLocation().getX() - (width / 2);
+        int topLeftY = player.getLocation().getY() - (height / 2);
         
         if (topLeftX < 0)
         {
             topLeftX = 0;
         }
-        else if (topLeftX + width >= _world.getSize())
+        else if (topLeftX + width >= world.getSize())
         {
-            topLeftX = _world.getSize() - width - 1;
+            topLeftX = world.getSize() - width - 1;
         }
         
         if (topLeftY < 0)
         {
             topLeftY = 0;
         }
-        else if (topLeftY + height >= _world.getSize())
+        else if (topLeftY + height >= world.getSize())
         {
-            topLeftY = _world.getSize() - height - 1;
+            topLeftY = world.getSize() - height - 1;
         }
         
         int bottomRightX = topLeftX + width;
@@ -79,10 +75,11 @@ public class WorldView extends RenderableView
         {
             for (int y = topLeftY; y < bottomRightY; y++)
             {
-                if (_player.getLocation().getX() == x &&
-                    _player.getLocation().getY() == y)
+                if (player.getLocation().getX() == x &&
+                    player.getLocation().getY() == y)
                 {
-                    image = Skin.getEntityImage(_player.getType());
+                    image = Skin.getEntityImage(player.getType().getID(),
+                                                player.getState().getID());
                 }
                 else
                 {
@@ -99,9 +96,55 @@ public class WorldView extends RenderableView
             }
         }
         
+        Font.drawString(world.getTimestamp(), g, 0, size.height - Skin.getTileSize().height);
+        
         g.dispose();
         
         return view;
+    }
+    
+    public void update(long ms)
+    {
+        world.update(ms);
+        player.update(ms);
+        
+        // Poll input
+        double distance = player.getSpeed() * ms / 1000;
+        int key = Input.getKey();
+        
+        switch(key)
+		{
+			case KeyEvent.VK_UP:
+				player.move(Direction.North, distance);
+				break;
+			case KeyEvent.VK_DOWN:
+                if (player.getLocation().getY() < world.getSize() - 1)
+                {
+				    player.move(Direction.South, distance);
+				}
+				break;
+			case KeyEvent.VK_LEFT:
+				player.move(Direction.West, distance);
+				break;
+			case KeyEvent.VK_RIGHT:
+                if (player.getLocation().getX() < world.getSize() - 1)
+                {
+				    player.move(Direction.East, distance);
+				}
+				break;
+			case KeyEvent.VK_F:
+			    // Fetch item
+			    Tile currentTile = world.getTile(player.getLocation());
+			    Entity entity = currentTile.getTopEntity();
+			    
+			    if (entity != null &&
+                    entity.hasAttribute(Entity.Attribute.FETCHABLE))
+			    {
+                    currentTile.popEntity();
+                    player.addInventory(entity);
+			    }
+			    break;
+		}
     }
     
     /*
@@ -114,41 +157,6 @@ public class WorldView extends RenderableView
     
     public void keyPressed(KeyEvent e)
     {
-        switch(e.getKeyCode())
-		{
-			case KeyEvent.VK_UP:
-				_player.move(Location.Direction.North);
-				break;
-			case KeyEvent.VK_DOWN:
-                if (_player.getLocation().getY() < _world.getSize() - 1)
-                {
-				    _player.move(Location.Direction.South);
-				}
-				break;
-			case KeyEvent.VK_LEFT:
-				_player.move(Location.Direction.West);
-				break;
-			case KeyEvent.VK_RIGHT:
-                if (_player.getLocation().getX() < _world.getSize() - 1)
-                {
-				    _player.move(Location.Direction.East);
-				}
-				break;
-			case KeyEvent.VK_B:
-			    // Brew
-			    break;
-			case KeyEvent.VK_F:
-			    // Fetch item
-			    Tile currentTile = _world.getTile(_player.getLocation());
-			    Entity entity = currentTile.getTopEntity();
-			    
-			    if (entity != null && entity.isFetchable())
-			    {
-                    currentTile.popEntity();
-                    _player.addInventory(entity);
-			    }
-			    break;
-		}
     }
     
     public void keyReleased(KeyEvent e)
@@ -161,7 +169,7 @@ public class WorldView extends RenderableView
     
     private BufferedImage getTileImage(int x, int y)
     {
-        Tile tile = _world.getTile(x, y);
+        Tile tile = world.getTile(x, y);
         
         if (tile != null)
         {
@@ -180,7 +188,11 @@ public class WorldView extends RenderableView
             
             for (int i = entities.size() - 1; i >= 0; i--)
             {
-                g.drawImage(Skin.getEntityImage(entities.get(i).getType()),
+                Entity entity = entities.get(i);
+                BufferedImage entityImage;
+                entityImage = Skin.getEntityImage(entity.getType().getID(),
+                                                  entity.getState().getID());
+                g.drawImage(entityImage,
                             0, 0,
                             null);
             }

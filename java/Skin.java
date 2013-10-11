@@ -32,11 +32,11 @@ public class Skin
      */
     
     private static String skinName;
-    private static Dimension _tileSize = new Dimension(16, 16);
-    private static Color _backgroundColor;
-    private static Color _foregroundColor;
-    private static Color _highlightColor;
-    private static HashMap<Integer, BufferedImage> _entityImages;
+    private static Dimension tileSize = new Dimension(16, 16);
+    private static Color backgroundColor;
+    private static Color foregroundColor;
+    private static Color highlightColor;
+    private static HashMap<Integer, HashMap<Integer, BufferedImage>> entityImages;
     private static BufferedImage font = null;
     private static BufferedImage menuBackground = null;
     
@@ -46,27 +46,27 @@ public class Skin
     
     public static Dimension getTileSize()
     {
-        return _tileSize;
+        return tileSize;
     }
     
     public static Color getBackgroundColor()
     {
-        return _backgroundColor;
+        return backgroundColor;
     }
     
     public static Color getForegroundColor()
     {
-        return _foregroundColor;
+        return foregroundColor;
     }
     
     public static Color getHighlightColor()
     {
-        return _highlightColor;
+        return highlightColor;
     }
     
-    public static BufferedImage getEntityImage(int type)
+    public static BufferedImage getEntityImage(int typeID, int stateID)
     {
-        return _entityImages.get(type);
+        return entityImages.get(typeID).get(stateID);
     }
     
     public static BufferedImage getFont()
@@ -116,7 +116,7 @@ public class Skin
         {
             int width = Integer.parseInt(element.getAttribute("width"));
             int height = Integer.parseInt(element.getAttribute("height"));
-            _tileSize = new Dimension(width, height);
+            tileSize = new Dimension(width, height);
         }
     }
     
@@ -128,7 +128,7 @@ public class Skin
         }
         
         String rgb = element.getTextContent();
-        _backgroundColor = createColorFromString(rgb);
+        backgroundColor = createColorFromString(rgb);
     }
     
     private static void loadForeground(Element element)
@@ -139,7 +139,7 @@ public class Skin
         }
         
         String rgb = element.getTextContent();
-        _foregroundColor = createColorFromString(rgb);
+        foregroundColor = createColorFromString(rgb);
     }
     
     private static void loadHighlight(Element element)
@@ -150,7 +150,7 @@ public class Skin
         }
         
         String rgb = element.getTextContent();
-        _highlightColor = createColorFromString(rgb);
+        highlightColor = createColorFromString(rgb);
     }
     
     private static void loadFont(Element element)
@@ -227,7 +227,7 @@ public class Skin
             return;
         }
         
-        _entityImages = new HashMap<Integer, BufferedImage>();
+        entityImages = new HashMap<Integer, HashMap<Integer, BufferedImage>>();
         
         NodeList nodes = element.getElementsByTagName("entity");
         for (int i = 0; i < nodes.getLength(); i++)
@@ -241,9 +241,24 @@ public class Skin
         if (entity.hasAttribute("id"))
         {
             int type = Integer.parseInt(entity.getAttribute("id"));
+            entityImages.put(type, new HashMap<Integer, BufferedImage>());
+            
+            NodeList nodes = entity.getElementsByTagName("state");
+            for (int i = 0; i < nodes.getLength(); i++)
+            {
+                loadState(type, (Element)(nodes.item(i)));
+            }
+        }
+    }
+    
+    private static void loadState(int typeID, Element state)
+    {
+        if (state.hasAttribute("id"))
+        {
+            int id = Integer.parseInt(state.getAttribute("id"));
             BufferedImage image = null;
             
-            Element node = Parser.getLastElement(entity, "image");
+            Element node = Parser.getLastElement(state, "image");
             
             if (node != null)
             {
@@ -251,7 +266,7 @@ public class Skin
             }
             else
             {
-                node = Parser.getLastElement(entity, "color");
+                node = Parser.getLastElement(state, "color");
                 
                 if (node != null)
                 {
@@ -261,7 +276,7 @@ public class Skin
                 }
                 else
                 {
-                    node = Parser.getLastElement(entity, "character");
+                    node = Parser.getLastElement(state, "character");
                     
                     if (node != null)
                     {
@@ -273,7 +288,7 @@ public class Skin
             
             if (image != null)
             {
-                _entityImages.put(type, image);
+                entityImages.get(typeID).put(id, image);
             }
         }
     }
@@ -301,13 +316,13 @@ public class Skin
         
         if (color != null)
         {
-            image = new BufferedImage(_tileSize.width,
-                                      _tileSize.height,
+            image = new BufferedImage(tileSize.width,
+                                      tileSize.height,
                                       BufferedImage.TYPE_INT_RGB);
             Graphics g = image.createGraphics();
         
             g.setColor(color);
-            g.fillRect(0, 0, _tileSize.width, _tileSize.height);
+            g.fillRect(0, 0, tileSize.width, tileSize.height);
         }
         
         return image;
@@ -315,25 +330,25 @@ public class Skin
     
     private static BufferedImage createImageFromCharacter(String character)
     {
-        BufferedImage image = new BufferedImage(_tileSize.width,
-                                                _tileSize.height,
+        BufferedImage image = new BufferedImage(tileSize.width,
+                                                tileSize.height,
                                                 BufferedImage.TYPE_INT_RGB);
         Graphics g = image.createGraphics();
         
-        g.setColor(_backgroundColor);
-        g.fillRect(0, 0, _tileSize.width, _tileSize.height);
+        g.setColor(backgroundColor);
+        g.fillRect(0, 0, tileSize.width, tileSize.height);
         
         Font.draw(character.substring(0, 1), g,
-                  (_tileSize.width - Font.getSize().width) / 2,
-                  (_tileSize.height - Font.getSize().height) / 2,
-                  FontStyle.Normal);
+                  (tileSize.width - Font.getSize().width) / 2,
+                  (tileSize.height - Font.getSize().height) / 2,
+                  Font.Style.NORMAL);
         
         return image;
     }
     
     // createColorFromString()
     // Parses an RGB color from the given string and returns a Color
-    // Expects string in the format "(#,#,#)"
+    // Expects string in the format "#,#,#"
     private static Color createColorFromString(String rgb)
     {
         Color color = null;

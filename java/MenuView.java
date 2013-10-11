@@ -30,9 +30,9 @@ public class MenuView extends RenderableView
      * Public Methods
      */
     
-    public void update()
+    public void update(long ms)
     {
-        menu.update();
+        menu.update(ms);
     }
     
     public BufferedImage render(Dimension size)

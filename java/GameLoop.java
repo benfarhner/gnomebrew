@@ -53,8 +53,8 @@ public class GameLoop implements Runnable
             fpsTime += elapsedTime;
             if (fpsTime >= 1000 / TARGETFPS)
             {
+                //manager.update(fpsTime);
                 manager.render();
-                //System.err.println(fpsTime);
                 fpsTime = 0;
             }
             

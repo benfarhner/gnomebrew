@@ -149,8 +149,8 @@ public class NewGnomeDialog extends Menu implements MenuListener
         int x = padding, y = padding;
         int lh = Font.getLineHeight();
         
-        Font.draw("New Gnome", g, x, y, FontStyle.Bold);
-        Font.draw("---------", g, x, y += lh, FontStyle.Bold);
+        Font.draw("New Gnome", g, x, y, Font.Style.BOLD);
+        Font.draw("---------", g, x, y += lh, Font.Style.BOLD);
         
         renderItems(size, new Dimension(0, y - padding + lh));
         

@@ -5,25 +5,13 @@ Location.java
 */
 
 public class Location
-{
-    /*
-     * Enumerations
-     */
-    
-    public enum Direction
-    {
-        North,
-        South,
-        East,
-        West
-    }
-    
+{    
     /*
      * Properties
      */
     
-    private int _x;
-    private int _y;
+    private double x;
+    private double y;
     
     /*
      * Constructors
@@ -31,11 +19,11 @@ public class Location
     
     public Location()
     {
-        _x = 0;
-        _y = 0;
+        x = 0;
+        y = 0;
     }
     
-    public Location(int x, int y)
+    public Location(double x, double y)
     {
         setX(x);
         setY(y);
@@ -43,8 +31,8 @@ public class Location
     
     public Location(Location copy)
     {
-        setX(copy._x);
-        setY(copy._y);
+        setX(copy.x);
+        setY(copy.y);
     }
     
     /*
@@ -53,39 +41,49 @@ public class Location
     
     public int getX()
     {
-        return _x;
+        return (int)x;
     }
     
     public int getY()
     {
-        return _y;
+        return (int)y;
+    }
+    
+    public double getRealX()
+    {
+        return x;
+    }
+    
+    public double getRealY()
+    {
+        return y;
     }
     
     /*
      * Mutators
      */
     
-    public void setX(int x)
+    public void setX(double x)
     {
         if (x >= 0)
         {
-            _x = x;
+            this.x = x;
         }
         else
         {
-            _x = 0;
+            this.x = 0;
         }
     }
     
-    public void setY(int y)
+    public void setY(double y)
     {
         if (y >= 0)
         {
-            _y = y;
+            this.y = y;
         }
         else
         {
-            _y = 0;
+            this.y = 0;
         }
     }
     
@@ -95,33 +93,38 @@ public class Location
     
     public boolean equals(Location other)
     {
-        return (_x == other._x && _y == other._y);
+        return (x == other.x && y == other.y);
     }
     
     public int hashCode()
     {
-        return _x * _y * (_x + _y);
+        return (int)(x * y * (x + y));
     }
     
     public void move(Direction direction)
     {
-        if (direction == Direction.North &&
-            _y > 0)
+        move(direction, 1);
+    }
+    
+    public void move(Direction direction, double distance)
+    {
+        if (direction.equals(Direction.North) &&
+            y >= distance)
         {
-            _y--;
+            y -= distance;
         }
-        else if (direction == Direction.South)
+        else if (direction.equals(Direction.South))
         {
-            _y++;
+            y += distance;
         }
-        else if (direction == Direction.East)
+        else if (direction.equals(Direction.East))
         {
-            _x++;
+            x += distance;
         }
-        else if (direction == Direction.West &&
-                 _x > 0)
+        else if (direction.equals(Direction.West) &&
+                 x >= distance)
         {
-            _x--;
+            x -= distance;
         }
     }
 }

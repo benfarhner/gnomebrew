@@ -8,16 +8,18 @@ Worlds are square, so only one dimension (size) is necessary.
 
 */
 
+import java.awt.event.*;
 import java.util.*;
 
-public class World
+public class World implements Updateable
 {
     /*
      * Properties
      */
     
-    private int _size;
-    private List<List<Tile>> _tiles;
+    private int size;
+    private List<List<Tile>> tiles;
+    private GameTime clock;
     
     /*
      * Constructors
@@ -25,18 +27,20 @@ public class World
     
     public World()
     {
-        _size = 9;
+        size = 9;
+        clock = new GameTime();
         
         generateWorld();
     }
     
     public World(int size)
     {
-        _size = 9;
+        this.size = 9;
+        clock = new GameTime();
         
         if (size > 0)
         {
-            _size = size;
+            this.size = size;
         }
         
         generateWorld();
@@ -48,15 +52,15 @@ public class World
     
     public int getSize()
     {
-        return _size;
+        return size;
     }
     
     public Tile getTile(int x, int y)
     {
-        if (x >= 0 && x < _tiles.size() &&
-            y >= 0 && y < _tiles.get(x).size())
+        if (x >= 0 && x < tiles.size() &&
+            y >= 0 && y < tiles.get(x).size())
         {
-            return _tiles.get(x).get(y);
+            return tiles.get(x).get(y);
         }
         
         return null;
@@ -67,6 +71,38 @@ public class World
         return getTile(location.getX(), location.getY());
     }
     
+    public GameTime getClock()
+    {
+        return clock;
+    }
+    
+    public String getTimestamp()
+    {
+        return clock.toString();
+    }
+    
+    /*
+     * Updateable Methods
+     */
+    
+    public void update(long ms)
+    {
+        // Calculate in-game time passage
+        long gameElapsed = (long)(ms * Config.getClockSpeed());
+        
+        // Update the game clock
+        clock.addMilliseconds(gameElapsed);
+        
+        // Update tiles
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                tiles.get(x).get(y).update(gameElapsed);
+            }
+        }
+    }
+    
     /*
      * Private Functions
      */
@@ -74,6 +110,6 @@ public class World
     private void generateWorld()
     {        
         WorldGenerator generator = new WorldGenerator();
-        _tiles = generator.generate(_size);        
+        tiles = generator.generate(size);        
     }
 }

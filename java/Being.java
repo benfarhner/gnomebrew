@@ -12,10 +12,10 @@ public class Being extends Entity
      * Properties
      */
     
-    private String name;
-    private int sex;
-    private String mood;
-    private ArrayList<Entity> inventory;
+    protected String name;
+    protected int sex;
+    protected String mood;
+    protected ArrayList<Entity> inventory;
     
     /*
      * Constructors
@@ -23,9 +23,10 @@ public class Being extends Entity
     
     public Being()
     {
-        type = EntityType.Being;
-        fetchable = false;
-        consumable = false;
+        super();
+        type = Entity.Type.BEING;
+        speed = 10;
+        attributes.clear();
         
         sex = Sex.Male;
         name = NameGenerator.generateName(sex);
@@ -98,8 +99,9 @@ public class Being extends Entity
      * Public Methods
      */
     
-    public void update()
+    public void update(long ms)
     {
+        super.update(ms);
     }
     
     // Determines if this Being has the right items in inventory to brew recipe
@@ -123,7 +125,7 @@ public class Being extends Entity
         
         for (int i = 0; i < ingredients.size(); i++)
         {
-            if (ingredients.get(i).isConsumable())
+            if (ingredients.get(i).hasAttribute(Entity.Attribute.CONSUMABLE))
             {
                 inventory.remove(ingredients.get(i));
             }

@@ -9,7 +9,9 @@ Displays player's inventory
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class InventoryMenu extends Menu
 {
@@ -18,7 +20,7 @@ public class InventoryMenu extends Menu
      */
     
     private Being player;
-    private ArrayList<Entity> inventory;
+    private HashMap<Entity, Integer> inventory;
     private ArrayList<Recipe> recipes;
     private int currentColumn = 0;
     private int currentItem = -1;
@@ -35,7 +37,7 @@ public class InventoryMenu extends Menu
         this.player = player;
         this.recipes = recipes;
         
-        update();
+        groupInventory(this.player.getInventory());
         firstItem();
     }
     
@@ -43,9 +45,9 @@ public class InventoryMenu extends Menu
      * Public Methods
      */
     
-    public void update()
+    public void update(long ms)
     {
-        inventory = player.getInventory();
+        groupInventory(player.getInventory());
     }
     
     public BufferedImage render(Dimension size)
@@ -69,10 +71,10 @@ public class InventoryMenu extends Menu
 			    nextItem();
 			    break;
 		    case KeyEvent.VK_LEFT:
-		        previousList();
+		        previousColumn();
 		        break;
 			case KeyEvent.VK_RIGHT:
-			    nextList();
+			    nextColumn();
 			    break;
 			case KeyEvent.VK_ENTER:
 			    handleSelection();
@@ -96,41 +98,40 @@ public class InventoryMenu extends Menu
             if (player.canBrew(recipes.get(currentItem)))
             {
                 player.brew(recipes.get(currentItem));
-                update();
             }
         }
     }
     
     protected void renderItems(Dimension size)
     {
-        // Create grouped list of inventory items
-        Map<Entity, Integer> inventoryGroup = new HashMap<Entity, Integer>();
-        
-        for (Entity entity : inventory)
-        {
-            Integer count = inventoryGroup.get(entity);
-            inventoryGroup.put(entity, (count == null ? 1 : count + 1));
-        }
-        
         Graphics g = buffer.createGraphics();
         int x = padding, y = padding;
-        int style;
+        Font.Style style;
         
-        Font.draw("Inventory", g, x, y, FontStyle.Bold);
+        if (currentColumn == 0)
+        {
+            style = Font.Style.HIGHLIGHT;
+        }
+        else
+        {
+            style = Font.Style.BOLD;
+        }
+        
+        Font.draw("Inventory", g, x, y, style);
         y += Font.getLineHeight();
-        Font.draw("---------", g, x, y, FontStyle.Bold);
+        Font.draw("---------", g, x, y, style);
         y += Font.getLineHeight();
         
         int index = 0;
-        for (Map.Entry<Entity, Integer> cursor : inventoryGroup.entrySet())
+        for (Map.Entry<Entity, Integer> cursor : inventory.entrySet())
         {
             if (currentColumn == 0 && index == currentItem)
             {
-                style = FontStyle.Highlight;
+                style = Font.Style.HIGHLIGHT;
             }
             else
             {
-                style = FontStyle.Normal;
+                style = Font.Style.NORMAL;
             }
             
             String text = "(" + cursor.getValue().toString() + ") " +
@@ -144,24 +145,33 @@ public class InventoryMenu extends Menu
         x = size.width / 2;
         y = padding;
         
-        Font.draw("Recipes", g, x, y, FontStyle.Bold);
+        if (currentColumn == 1)
+        {
+            style = Font.Style.HIGHLIGHT;
+        }
+        else
+        {
+            style = Font.Style.BOLD;
+        }
+        
+        Font.draw("Recipes", g, x, y, style);
         y += Font.getLineHeight();
-        Font.draw("-------", g, x, y, FontStyle.Bold);
+        Font.draw("-------", g, x, y, style);
         y += Font.getLineHeight();
         
         for (int i = 0; i < recipes.size(); i++)
         {
             if (currentColumn == 1 && i == currentItem)
             {
-                style = FontStyle.Highlight;
+                style = Font.Style.HIGHLIGHT;
             }
             else if (player.canBrew(recipes.get(i)))
             {
-                style = FontStyle.Normal;
+                style = Font.Style.NORMAL;
             }
             else
             {
-                style = FontStyle.Disabled;
+                style = Font.Style.DISABLED;
             }
             
             Font.draw(recipes.get(i).getResult().getDescription(), g,
@@ -205,6 +215,11 @@ public class InventoryMenu extends Menu
             }
             while (!player.canBrew(recipes.get(currentItem)) &&
                    count < recipes.size());
+            
+            if (count == recipes.size())
+            {
+                currentItem = -1;
+            }
         }
     }
     
@@ -240,6 +255,11 @@ public class InventoryMenu extends Menu
             }
             while (!player.canBrew(recipes.get(currentItem)) &&
                    count < recipes.size());
+            
+            if (count == recipes.size())
+            {
+                currentItem = -1;
+            }
         }
     }
     
@@ -263,7 +283,7 @@ public class InventoryMenu extends Menu
         }
     }
     
-    protected void nextList()
+    protected void nextColumn()
     {
         if (currentColumn < 1)
         {
@@ -277,7 +297,7 @@ public class InventoryMenu extends Menu
         firstItem();
     }
     
-    protected void previousList()
+    protected void previousColumn()
     {
         if (currentColumn > 0)
         {
@@ -289,5 +309,16 @@ public class InventoryMenu extends Menu
         }
         
         firstItem();
+    }
+    
+    protected void groupInventory(ArrayList<Entity> entities)
+    {
+        inventory = new HashMap<Entity, Integer>();
+        
+        for (Entity entity : entities)
+        {
+            Integer count = inventory.get(entity);
+            inventory.put(entity, (count == null ? 1 : count + 1));
+        }
     }
 }

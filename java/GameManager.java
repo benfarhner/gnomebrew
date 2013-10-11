@@ -9,7 +9,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
-public class GameManager implements MenuListener, KeyListener
+public class GameManager implements MenuListener, KeyListener, Updateable
 {
     /*
      * Properties
@@ -17,12 +17,13 @@ public class GameManager implements MenuListener, KeyListener
     
     private boolean running;
     
+    // Core objects
     private World world;
     private Being player;
     
+    // View-related properties
     private JFrame window;
     private RenderingPanel panel;
-    
     private WorldView gameView = null;
     private MenuView mainMenuView;
     private MenuView newGnomeView;
@@ -35,8 +36,6 @@ public class GameManager implements MenuListener, KeyListener
     private final static int MAINMENU_NEWGAME = 11;
     private final static int PAUSEMENU_RESUME = 20;
     private final static int GNOMEDIALOG_STARTGAME = 30;
-    
-    private final static int FPS = 30;
     
     /*
      * Constructors
@@ -117,13 +116,18 @@ public class GameManager implements MenuListener, KeyListener
         }
     }
     
-    public void update(long ms)
-    {
-    }
-    
     public void render()
     {
         panel.render();
+    }
+    
+    /*
+     * Updateable Methods
+     */
+    
+    public void update(long ms)
+    {
+        panel.update(ms);
     }
     
     /*
@@ -162,11 +166,17 @@ public class GameManager implements MenuListener, KeyListener
     
     public void keyPressed(KeyEvent e)
     {
+        Input.setKey(e.getKeyCode());
         panel.keyPressed(e);
     }
     
     public void keyReleased(KeyEvent e)
     {
+        if (e.getKeyCode() == Input.getKey())
+        {
+            Input.setKey(-1);
+        }
+        
         if (panel.getView() == gameView)
         {
             switch (e.getKeyCode())

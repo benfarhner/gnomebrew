@@ -21,19 +21,36 @@
     
     <entities>
         <entity id="0">
-            <!--color>255,0,0</color-->
-            <character>A</character>
+            <state id="0">
+                <!--color>255,0,0</color-->
+                <character>A</character>
+            </state>
         </entity>
         <entity id="1">
-            <image>images/dirt.png</image>
-            <color>139,69,19</color>
+            <state id="0">
+                <image>images/dirt.png</image>
+                <color>139,69,19</color>
+            </state>
         </entity>
         <entity id="2">
-            <image>images/stone.png</image>
-            <color>201,201,201</color>
+            <state id="0">
+                <image>images/stone.png</image>
+                <color>201,201,201</color>
+            </state>
         </entity>
         <entity id="3">
-            <color>0,196,0</color>
+            <state id="0">
+                <color>0,196,0</color>
+            </state>
+            <state id="1">
+                <color>0,255,0</color>
+            </state>
+            <state id="2">
+                <color>255,255,0</color>
+            </state>
+            <state id="3">
+                <color>255,196,0</color>
+            </state>
         </entity>
     </entities>
 </skin>
