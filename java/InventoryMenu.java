@@ -93,7 +93,9 @@ public class InventoryMenu extends Menu
     
     protected void handleSelection()
     {
-        if (currentColumn == 1)
+        if (currentColumn == 1 &&
+            currentItem > -1 &&
+            currentItem < recipes.size())
         {
             if (player.canBrew(recipes.get(currentItem)))
             {
@@ -216,7 +218,8 @@ public class InventoryMenu extends Menu
             while (!player.canBrew(recipes.get(currentItem)) &&
                    count < recipes.size());
             
-            if (count == recipes.size())
+            if (count == recipes.size() &&
+                !player.canBrew(recipes.get(currentItem)))
             {
                 currentItem = -1;
             }
@@ -256,7 +259,8 @@ public class InventoryMenu extends Menu
             while (!player.canBrew(recipes.get(currentItem)) &&
                    count < recipes.size());
             
-            if (count == recipes.size())
+            if (count == recipes.size() &&
+                !player.canBrew(recipes.get(currentItem)))
             {
                 currentItem = -1;
             }
@@ -313,9 +317,10 @@ public class InventoryMenu extends Menu
     
     protected void groupInventory(ArrayList<Entity> entities)
     {
+        ArrayList<Entity> entitiesCopy = new ArrayList<Entity>(entities);
         inventory = new HashMap<Entity, Integer>();
         
-        for (Entity entity : entities)
+        for (Entity entity : entitiesCopy)
         {
             Integer count = inventory.get(entity);
             inventory.put(entity, (count == null ? 1 : count + 1));

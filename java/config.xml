@@ -1,6 +1,6 @@
 <config>
     <skin>default</skin>
-    <screen width="40" height="30"></screen>
+    <screen width="80" height="60"></screen>
     <clock speed="600"></clock>
     <names>
         <name position="first" sex="male">Bim</name>

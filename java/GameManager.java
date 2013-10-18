@@ -46,9 +46,6 @@ public class GameManager implements MenuListener, KeyListener, Updateable
         // Load configuration first
         Config.load();
         
-        world = new World(257);
-        player = new Being();
-        
         int width = Config.getScreenSize().width;
         int height = Config.getScreenSize().height;
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -80,10 +77,6 @@ public class GameManager implements MenuListener, KeyListener, Updateable
         pauseMenu.add(new MenuItem(PAUSEMENU_RESUME, "Resume"));
         pauseMenu.add(new MenuItem(MENU_QUIT, "Quit"));
         pauseMenuView = new MenuView(pauseMenu);
-        
-        Menu inventory = new InventoryMenu(player, genRecipes());
-        inventory.addMenuListener(this);
-        inventoryView = new MenuView(inventory);
         
         window.pack();
         window.setVisible(true);
@@ -145,7 +138,14 @@ public class GameManager implements MenuListener, KeyListener, Updateable
             panel.setView(newGnomeView);
         }
         else if (selection.getID() == GNOMEDIALOG_STARTGAME)
-        {
+        {        
+            world = new World(257);
+            player = new Being();
+            
+            Menu inventory = new InventoryMenu(player, genRecipes());
+            inventory.addMenuListener(this);
+            inventoryView = new MenuView(inventory);
+            
             gameView = new WorldView(world, player);
             panel.setView(gameView);
         }
