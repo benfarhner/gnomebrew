@@ -61,4 +61,33 @@ public class EntityState
     {
         attributes.add(attribute);
     }
+    
+    /*
+     * Public Methods
+     */
+    
+    public boolean equals(Object other)
+    {
+        if (other == this)
+        {
+            return true;
+        }
+        
+        if (!(other instanceof EntityState))
+        {
+            return false;
+        }
+        
+        return id == ((EntityState)other).id;
+    }
+    
+    public int hashCode()
+    {
+        return id;
+    }
+    
+    public int compareTo(EntityState other)
+    {
+        return id - other.id;
+    }
 }

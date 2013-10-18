@@ -45,10 +45,21 @@ public class Wheat extends Entity
         attributes.add(Entity.Attribute.CONSUMABLE);
         
         states.clear();
-        states.add(new EntityState(0, "Grass Seeds"));
-        states.add(new EntityState(1, "Young Grass"));
-        states.add(new EntityState(2, "Ripe Grass"));
-        states.add(new EntityState(3, "Dead Grass"));
+        EntityState state = new EntityState(0, "Wheat Berries");
+        state.addAttribute(Entity.Attribute.CONSUMABLE);
+        states.add(state);
+        state = new EntityState(1, "Young Wheat");
+        state.addAttribute(Entity.Attribute.CONSUMABLE);
+        states.add(state);
+        state = new EntityState(2, "Ripe Wheat");
+        state.addAttribute(Entity.Attribute.FETCHABLE);
+        state.addAttribute(Entity.Attribute.CONSUMABLE);
+        states.add(state);
+        state = new EntityState(3, "Dead Wheat");
+        state.addAttribute(Entity.Attribute.CONSUMABLE);
+        states.add(state);
+        stateCursor = states.listIterator();
+        currentState = stateCursor.next();
     }
     
     public void update(long ms)

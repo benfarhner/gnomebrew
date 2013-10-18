@@ -127,11 +127,21 @@ public class Entity implements Comparable<Entity>, Updateable
     
     public String getDescription()
     {
+        if (currentState != null)
+        {
+            return currentState.getDescription();
+        }
+        
         return description;
     }
     
     public boolean hasAttribute(Attribute attribute)
     {
+        if (currentState != null)
+        {
+            return currentState.hasAttribute(attribute);
+        }
+        
         return attributes.contains(attribute);
     }
     
@@ -156,17 +166,22 @@ public class Entity implements Comparable<Entity>, Updateable
             return false;
         }
         
-        return type.getID() == ((Entity)other).type.getID();
+        return (currentState != null &&
+                currentState.equals(((Entity)other).currentState));
     }
     
     public int hashCode()
     {
-        return type.getID();
+        return type.getID() * (currentState != null ?
+                               currentState.getID() + 1 : 0);
     }
     
     public int compareTo(Entity other)
     {
-        return type.getID() - other.type.getID();
+        return (type.getID() * 100 + (currentState != null ?
+                                      currentState.getID() : 0)) -
+               (other.type.getID() * 100 + (other.currentState != null ?
+                                            other.currentState.getID() : 0));
     }
     
     public void update(long ms)

@@ -15,5 +15,13 @@ public class Stone extends Entity
         attributes.clear();
         attributes.add(Entity.Attribute.FETCHABLE);
         attributes.add(Entity.Attribute.CONSUMABLE);
+        
+        states.clear();
+        EntityState state = new EntityState(0, "Stone");
+        state.addAttribute(Entity.Attribute.FETCHABLE);
+        state.addAttribute(Entity.Attribute.CONSUMABLE);
+        states.add(state);
+        stateCursor = states.listIterator();
+        currentState = stateCursor.next();
     }
 }
