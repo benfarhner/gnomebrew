@@ -114,7 +114,7 @@ public class Being extends Entity
         {
             ingredients.remove(inventory.get(i));  
         }
-    
+        
         return ingredients.size() == 0;
     }
     

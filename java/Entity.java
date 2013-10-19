@@ -166,14 +166,13 @@ public class Entity implements Comparable<Entity>, Updateable
             return false;
         }
         
-        return (currentState != null &&
-                currentState.equals(((Entity)other).currentState));
+        return hashCode() == ((Entity)other).hashCode();
     }
     
     public int hashCode()
     {
-        return type.getID() * (currentState != null ?
-                               currentState.getID() + 1 : 0);
+        return type.getID() * 100 + (currentState != null ?
+                                     currentState.getID() : 0);
     }
     
     public int compareTo(Entity other)
