@@ -55,5 +55,6 @@ public class MenuView extends RenderableView
     public void keyReleased(KeyEvent e)
     {
         menu.handleInput(e.getKeyCode());
+        notifyViewChanged();
     }
 }

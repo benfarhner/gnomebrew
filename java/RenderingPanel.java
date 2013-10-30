@@ -11,7 +11,7 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-public class RenderingPanel extends JPanel implements KeyListener, Updateable
+public class RenderingPanel extends JPanel implements KeyListener, ViewListener, Updateable
 {
     /*
      * Properties
@@ -53,10 +53,23 @@ public class RenderingPanel extends JPanel implements KeyListener, Updateable
     
     public void setView(RenderableView view)
     {
+        if (this.view != null)
+        {
+            this.view.removeViewListener(this);
+        }
+        
         this.view = view;
+        
+        if (this.view != null)
+        {
+            this.view.addViewListener(this);
+        }
         
         // Store previous rendered view
         oldBuffer = copyImage(buffer);
+        
+        // Render new view initially
+        renderView();
     }
     
     /*
@@ -69,6 +82,11 @@ public class RenderingPanel extends JPanel implements KeyListener, Updateable
         {
             view.update(ms);
         }
+    }
+    
+    public void handleViewChanged()
+    {
+        renderView();
     }
     
     public void render()
@@ -87,33 +105,7 @@ public class RenderingPanel extends JPanel implements KeyListener, Updateable
     
     public void paintComponent(Graphics g)
     {
-        if (view != null)
-        {
-            BufferedImage image;
-            image = view.render(new Dimension(getPreferredSize().width / 2,
-                                              getPreferredSize().height / 2));
-            Image scaled;
-            scaled = image.getScaledInstance(getPreferredSize().width,
-                                             getPreferredSize().height,
-                                             Image.SCALE_DEFAULT);
-            
-            Graphics2D bg = buffer.createGraphics();
-            bg.setComposite(AlphaComposite.Clear);
-            bg.setBackground(new Color(255, 255, 255, 0));
-            bg.fillRect(0, 0,
-                        getPreferredSize().width, getPreferredSize().height);
-            bg.setComposite(AlphaComposite.SrcOver);
-            
-            if (oldBuffer != null)
-            {
-                bg.drawImage(oldBuffer, 0, 0, null);
-            }
-            
-            bg.drawImage(scaled, 0, 0, null);
-            bg.dispose();
-            
-            g.drawImage(buffer, 0, 0, null);
-        }
+        g.drawImage(buffer, 0, 0, null);
     }
     
     public void setPreferredSize(Dimension size)
@@ -160,6 +152,35 @@ public class RenderingPanel extends JPanel implements KeyListener, Updateable
     /*
      * Private Methods
      */
+    
+    private void renderView()
+    {
+        if (view != null)
+        {
+            BufferedImage image;
+            image = view.render(new Dimension(getPreferredSize().width / 2,
+                                              getPreferredSize().height / 2));
+            Image scaled;
+            scaled = image.getScaledInstance(getPreferredSize().width,
+                                             getPreferredSize().height,
+                                             Image.SCALE_DEFAULT);
+            
+            Graphics2D bg = buffer.createGraphics();
+            bg.setComposite(AlphaComposite.Clear);
+            bg.setBackground(new Color(255, 255, 255, 0));
+            bg.fillRect(0, 0,
+                        getPreferredSize().width, getPreferredSize().height);
+            bg.setComposite(AlphaComposite.SrcOver);
+            
+            if (oldBuffer != null)
+            {
+                bg.drawImage(oldBuffer, 0, 0, null);
+            }
+            
+            bg.drawImage(scaled, 0, 0, null);
+            bg.dispose();
+        }
+    }
     
     private BufferedImage copyImage(BufferedImage image)
     {

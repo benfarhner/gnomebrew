@@ -145,6 +145,8 @@ public class WorldView extends RenderableView
 			    }
 			    break;
 		}
+        
+        notifyViewChanged();
     }
     
     /*

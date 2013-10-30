@@ -5,6 +5,7 @@ Entity.java
 */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ListIterator;
 
@@ -21,7 +22,8 @@ public class Entity implements Comparable<Entity>, Updateable
         DIRT(1),
         STONE(2),
         WHEAT(3),
-        STONEMILL(4);
+        STONEMILL(4),
+        WHEATFLOUR(5);
         
         private int id;
         
@@ -53,9 +55,9 @@ public class Entity implements Comparable<Entity>, Updateable
     protected String description;
     protected GameTime age;
     protected HashSet<Attribute> attributes;
-    protected ArrayList<EntityState> states;
-    protected ListIterator<EntityState> stateCursor;
+    protected HashMap<Integer, EntityState> states;
     protected EntityState currentState;
+    protected ArrayList<PropertyListener> listeners;
     
     /*
      * Constructors
@@ -73,10 +75,11 @@ public class Entity implements Comparable<Entity>, Updateable
         attributes = new HashSet<Attribute>();
         attributes.add(Attribute.CONSUMABLE);
         
-        states = new ArrayList<EntityState>();
-        states.add(new EntityState(0, description));
-        stateCursor = states.listIterator();
-        currentState = stateCursor.next();
+        states = new HashMap<Integer, EntityState>();
+        states.put(0, new EntityState(0, description));
+        currentState = states.get(0);
+        
+        listeners = new ArrayList<PropertyListener>();
     }
     
     // DESTROY
@@ -96,9 +99,8 @@ public class Entity implements Comparable<Entity>, Updateable
         description = copy.description;
         age = new GameTime(copy.age);
         attributes = new HashSet<Attribute>(copy.attributes);
-        states = new ArrayList<EntityState>(copy.states);
-        stateCursor = states.listIterator();
-        currentState = stateCursor.next();
+        states = new HashMap<Integer, EntityState>(copy.states);
+        currentState = new EntityState(copy.currentState);
     }
     
     /*
@@ -151,6 +153,38 @@ public class Entity implements Comparable<Entity>, Updateable
     }
     
     /*
+     * Mutators
+     */
+    
+    public void turn(Direction direction)
+    {
+        this.direction = new Direction(direction);
+        notifyPropertyChanged("direction");
+    }
+    
+    public void move(double distance)
+    {
+        location.move(this.direction, distance);
+        notifyPropertyChanged("location");
+    }
+    
+    public void move(Direction direction, double distance)
+    {
+        turn(direction);
+        move(distance);
+    }
+    
+    public void addPropertyListener(PropertyListener listener)
+    {
+        listeners.add(listener);
+    }
+    
+    public void removePropertyListener(PropertyListener listener)
+    {
+        listeners.remove(listener);
+    }
+    
+    /*
      * Public Methods
      */
     
@@ -188,19 +222,18 @@ public class Entity implements Comparable<Entity>, Updateable
         age.addMilliseconds(ms);
     }
     
-    public void turn(Direction direction)
-    {
-        this.direction = new Direction(direction);
-    }
+    /*
+     * Protected Methods
+     */
     
-    public void move(double distance)
+    protected void notifyPropertyChanged(String propertyName)
     {
-        location.move(this.direction, distance);
-    }
-    
-    public void move(Direction direction, double distance)
-    {
-        turn(direction);
-        move(distance);
+        for (PropertyListener listener : listeners)
+        {
+            if (listener != null)
+            {
+                listener.handlePropertyChanged(propertyName);
+            }
+        }
     }
 }

@@ -55,5 +55,6 @@ public class DialogView extends RenderableView
     public void keyReleased(KeyEvent e)
     {
         dialog.handleInput(e.getKeyCode());
+        notifyViewChanged();
     }
 }

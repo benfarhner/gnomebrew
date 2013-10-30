@@ -18,8 +18,7 @@ public class StoneMill extends Entity
         states.clear();
         EntityState state = new EntityState(0, "Stone Mill");
         state.addAttribute(Entity.Attribute.FETCHABLE);
-        states.add(state);
-        stateCursor = states.listIterator();
-        currentState = stateCursor.next();
+        states.put(0, state);
+        currentState = states.get(0);
     }
 }

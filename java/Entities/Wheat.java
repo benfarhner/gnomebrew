@@ -12,14 +12,12 @@ public class Wheat extends Entity
      * Enumerations
      */
     
-    private enum State
+    public enum State
     {
-        UNKNOWN(-1),
-        BEING(0),
-        DIRT(1),
-        STONE(2),
-        WHEAT(3),
-        STONEMILL(4);
+        WHEATBERRIES(0),
+        YOUNGWHEAT(1),
+        RIPEWHEAT(2),
+        DEADWHEAT(3);
         
         private int id;
         
@@ -34,7 +32,16 @@ public class Wheat extends Entity
         }
     }
     
+    /*
+     * Constructors
+     */
+    
     public Wheat()
+    {
+        this(State.WHEATBERRIES);
+    }
+    
+    public Wheat(State initialState)
     {
         super();
         type = Entity.Type.WHEAT;
@@ -45,22 +52,29 @@ public class Wheat extends Entity
         attributes.add(Entity.Attribute.CONSUMABLE);
         
         states.clear();
-        EntityState state = new EntityState(0, "Wheat Berries");
+        EntityState state = new EntityState(State.WHEATBERRIES.getID(), "Wheat Berries");
         state.addAttribute(Entity.Attribute.CONSUMABLE);
-        states.add(state);
-        state = new EntityState(1, "Young Wheat");
+        states.put(State.WHEATBERRIES.getID(), state);
+        
+        state = new EntityState(State.YOUNGWHEAT.getID(), "Young Wheat");
         state.addAttribute(Entity.Attribute.CONSUMABLE);
-        states.add(state);
-        state = new EntityState(2, "Ripe Wheat");
+        states.put(State.YOUNGWHEAT.getID(), state);
+        
+        state = new EntityState(State.RIPEWHEAT.getID(), "Ripe Wheat");
         state.addAttribute(Entity.Attribute.FETCHABLE);
         state.addAttribute(Entity.Attribute.CONSUMABLE);
-        states.add(state);
-        state = new EntityState(3, "Dead Wheat");
+        states.put(State.RIPEWHEAT.getID(), state);
+        
+        state = new EntityState(State.DEADWHEAT.getID(), "Dead Wheat");
         state.addAttribute(Entity.Attribute.CONSUMABLE);
-        states.add(state);
-        stateCursor = states.listIterator();
-        currentState = stateCursor.next();
+        states.put(State.DEADWHEAT.getID(), state);
+        
+        currentState = states.get(initialState.getID());
     }
+    
+    /*
+     * Public Methods
+     */
     
     public void update(long ms)
     {
@@ -68,19 +82,19 @@ public class Wheat extends Entity
         
         if (age.getTotalHours() >= 3)
         {
-            currentState = states.get(3);
+            currentState = states.get(State.DEADWHEAT.getID());
         }
         else if (age.getTotalHours() >= 2)
         {
-            currentState = states.get(2);
+            currentState = states.get(State.RIPEWHEAT.getID());
         }
         else if (age.getTotalHours() >= 1)
         {
-            currentState = states.get(1);
+            currentState = states.get(State.YOUNGWHEAT.getID());
         }
         else
         {
-            currentState = states.get(0);
+            currentState = states.get(State.WHEATBERRIES.getID());
         }
     }
 }

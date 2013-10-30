@@ -216,8 +216,13 @@ public class GameManager implements MenuListener, KeyListener, Updateable
         ArrayList<Entity> ingredients = new ArrayList<Entity>();
         ingredients.add(new Stone());
         ingredients.add(new Stone());
-        
         recipes.add(new Recipe(new StoneMill(), ingredients));
+        
+        ingredients = new ArrayList<Entity>();
+        ingredients.add(new StoneMill());
+        ingredients.add(new Wheat(Wheat.State.RIPEWHEAT));
+        ingredients.add(new Wheat(Wheat.State.RIPEWHEAT));
+        recipes.add(new Recipe(new WheatFlour(), ingredients));
         
         return recipes;
     }

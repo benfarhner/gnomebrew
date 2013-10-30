@@ -34,6 +34,13 @@ public class EntityState
         attributes = new HashSet<Entity.Attribute>();
     }
     
+    public EntityState(EntityState copy)
+    {
+        id = copy.id;
+        description = copy.description;
+        attributes = new HashSet<Entity.Attribute>(copy.attributes);
+    }
+    
     /*
      * Accessors
      */

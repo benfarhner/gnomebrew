@@ -20,8 +20,7 @@ public class Stone extends Entity
         EntityState state = new EntityState(0, "Stone");
         state.addAttribute(Entity.Attribute.FETCHABLE);
         state.addAttribute(Entity.Attribute.CONSUMABLE);
-        states.add(state);
-        stateCursor = states.listIterator();
-        currentState = stateCursor.next();
+        states.put(0, state);
+        currentState = states.get(0);
     }
 }

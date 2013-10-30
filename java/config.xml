@@ -1,7 +1,7 @@
 <config>
     <skin>default</skin>
-    <screen width="80" height="60"></screen>
-    <clock speed="600"></clock>
+    <screen width="40" height="30" />
+    <clock speed="600" />
     <names>
         <name position="first" sex="male">Bim</name>
         <name position="first" sex="male">Dom</name>
@@ -54,4 +54,78 @@
         <name position="last" type="verb">digger</name>
         <name position="last" type="verb">tender</name>
     </names>
+    <entities>
+        <entity id="1">
+            <state id="0">
+                <description>Dirt</description>
+            </state>
+        </entity>
+        <entity id="2">
+            <state id="0" attributes="fetchable consumable">
+                <description>Stone</description>
+            </state>
+        </entity>
+        <entity id="3">
+            <state id="0" attributes="fetchable">
+                <description>Stone Mill</description>
+            </state>
+        </entity>
+        <entity id="4">
+            <state id="0" attributes="consumable">
+                <description>Wheat Berries</description>
+            </state>
+            <state id="1" attributes="consumable">
+                <description>Young Wheat</description>
+            </state>
+            <state id="2" attributes="fetchable consumable">
+                <description>Ripe Wheat</description>
+            </state>
+            <state id="3" attributes="consumable">
+                <description>Dead Wheat</description>
+            </state>
+        </entity>
+        <entity id="5">
+            <state id="0" attributes="fetchable consumable">
+                <description>Wheat Flour</description>
+            </state>
+            <state id="1" attributes="fetchable consumable">
+                <description>Spoiled Wheat Flour</description>
+            </state>
+        </entity>
+        <entity id="6">
+            <state id="0" attributes="fetchable consumable">
+                <description>Water</description>
+            </state>
+        </entity>
+        <entity id="7">
+            <state id="0" attributes="fetchable consumable">
+                <description>Dough</description>
+            </state>
+            <state id="1" attributes="fetchable consumable">
+                <description>Risen Dough</description>
+            </state>
+            <state id="2" attributes="fetchable consumable">
+                <description>Old Dough</description>
+            </state>
+            <state id="3" attributes="fetchable consumable">
+                <description>Moldy Dough</description>
+            </state>
+        </entity>
+    </entities>
+    <recipes>
+        <recipe>
+            <result id="3" state="0" />
+            <ingredients>
+                <ingredient id="2" state="0" />
+                <ingredient id="2" state="0" />
+            </ingredients>
+        </recipe>
+        <recipe>
+            <result id="5" state="0" />
+            <ingredients>
+                <ingredient id="3" state="0" />
+                <ingredient id="4" state="2" />
+            </ingredients>
+        </recipe>
+    </recipes>
 </config>

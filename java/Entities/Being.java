@@ -75,16 +75,19 @@ public class Being extends Entity
     public void setName(String name)
     {
         this.name = name;
+        notifyPropertyChanged("name");
     }
     
     public void setSex(int sex)
     {
         this.sex = sex;
+        notifyPropertyChanged("sex");
     }
     
     public void setMood(String mood)
     {
         this.mood = mood;
+        notifyPropertyChanged("mood");
     }
     
     public void addInventory(Entity entity)
@@ -92,6 +95,7 @@ public class Being extends Entity
         if (entity != null)
         {
             inventory.add(entity);
+            notifyPropertyChanged("inventory");
         }
     }
     
@@ -119,6 +123,7 @@ public class Being extends Entity
     }
     
     // Brews recipe and adds the newly created Entity to inventory
+    // WARNING: Assumes Being canBrew this Recipe!
     public void brew(Recipe recipe)
     {
         ArrayList<Entity> ingredients = recipe.getIngredients();
@@ -132,6 +137,7 @@ public class Being extends Entity
         }
         
         inventory.add(recipe.getResult());
+        notifyPropertyChanged("inventory");
     }
     
     /*

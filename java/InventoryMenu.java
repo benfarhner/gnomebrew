@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InventoryMenu extends Menu
+public class InventoryMenu extends Menu implements PropertyListener
 {
     /*
      * Properties
@@ -37,6 +37,7 @@ public class InventoryMenu extends Menu
         this.player = player;
         this.recipes = recipes;
         
+        this.player.addPropertyListener(this);
         groupInventory(this.player.getInventory());
         firstItem();
     }
@@ -47,7 +48,15 @@ public class InventoryMenu extends Menu
     
     public void update(long ms)
     {
-        groupInventory(player.getInventory());
+    }
+    
+    public void handlePropertyChanged(String propertyName)
+    {
+        if (propertyName == "inventory")
+        {
+            System.out.println("groupInventory()");
+            groupInventory(player.getInventory());
+        }
     }
     
     public BufferedImage render(Dimension size)
