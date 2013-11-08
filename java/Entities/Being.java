@@ -9,11 +9,21 @@ import java.util.ArrayList;
 public class Being extends Entity
 {
     /*
+     * Enumerations
+     */
+    
+    public enum Gender
+    {
+        MALE,
+        FEMALE
+    }
+    
+    /*
      * Properties
      */
     
     protected String name;
-    protected int sex;
+    protected Gender gender;
     protected String mood;
     protected ArrayList<Entity> inventory;
     
@@ -28,8 +38,8 @@ public class Being extends Entity
         speed = 10;
         attributes.clear();
         
-        sex = Sex.Male;
-        name = NameGenerator.generateName(sex);
+        gender = Gender.MALE;
+        name = NameGenerator.generateName(gender);
         mood = generateMood();
         inventory = new ArrayList<Entity>();
     }
@@ -39,7 +49,7 @@ public class Being extends Entity
         super(copy);
         
         name = copy.name;
-        sex = copy.sex;
+        gender = copy.gender;
         mood = copy.mood;
         inventory = new ArrayList<Entity>(copy.inventory);
     }
@@ -53,9 +63,9 @@ public class Being extends Entity
         return name;
     }
     
-    public int getSex()
+    public Gender getGender()
     {
-        return sex;
+        return gender;
     }
     
     public String getMood()
@@ -78,10 +88,10 @@ public class Being extends Entity
         notifyPropertyChanged("name");
     }
     
-    public void setSex(int sex)
+    public void setGender(Gender gender)
     {
-        this.sex = sex;
-        notifyPropertyChanged("sex");
+        this.gender = gender;
+        notifyPropertyChanged("gender");
     }
     
     public void setMood(String mood)

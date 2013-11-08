@@ -54,7 +54,6 @@ public class InventoryMenu extends Menu implements PropertyListener
     {
         if (propertyName == "inventory")
         {
-            System.out.println("groupInventory()");
             groupInventory(player.getInventory());
         }
     }

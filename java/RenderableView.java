@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Collections;
 
 public class RenderableView implements Updateable, KeyListener
 {
@@ -71,13 +72,18 @@ public class RenderableView implements Updateable, KeyListener
     
     protected void notifyViewChanged()
     {
-        ListIterator<ViewListener> iter = listeners.listIterator();
-        while (iter.hasNext())
+        List<ViewListener> syncList = Collections.synchronizedList(listeners);
+        
+        synchronized (syncList)
         {
-            ViewListener listener = iter.next();
-            if (listener != null)
+            ListIterator<ViewListener> iter = syncList.listIterator();
+            while (iter.hasNext())
             {
-                listener.handleViewChanged();
+                ViewListener listener = iter.next();
+                if (listener != null)
+                {
+                    listener.handleViewChanged();
+                }
             }
         }
     }

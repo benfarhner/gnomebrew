@@ -90,6 +90,16 @@ public class Entity implements Comparable<Entity>, Updateable
         this.type = type;
     }
     
+    public Entity(int type, int state)
+    {
+        this();
+        
+        //this.type = typeFromInt(type);
+        //states.clear();
+        //states.put(state, new EntityState(state, description));
+        //currentState = states.get(state);
+    }
+    
     public Entity(Entity copy)
     {
         type = copy.type;

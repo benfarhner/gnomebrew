@@ -1,12 +1,12 @@
 /*
 
-Sex.java
+Gender.java
 
-Provides constants for designating Being sex.
+Provides constants for designating Being gender.
 
 */
 
-public class Sex
+public class Gender
 {
     /*
      * Constants

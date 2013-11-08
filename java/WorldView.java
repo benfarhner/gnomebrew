@@ -132,8 +132,7 @@ public class WorldView extends RenderableView
 				    player.move(Direction.East, distance);
 				}
 				break;
-			case KeyEvent.VK_F:
-			    // Fetch item
+			case KeyEvent.VK_F: // Fetch item
 			    Tile currentTile = world.getTile(player.getLocation());
 			    Entity entity = currentTile.getTopEntity();
 			    

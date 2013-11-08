@@ -72,15 +72,15 @@ public class NameGenerator
     
     public static String generateName()
     {
-        return generateName(Sex.Male);
+        return generateName(Being.Gender.MALE);
     }
     
-    public static String generateName(int sex)
+    public static String generateName(Being.Gender gender)
     {
         String name = "";
         Random rand = new Random((new Date()).getTime());
         
-        if (sex == Sex.Female)
+        if (gender == Being.Gender.FEMALE)
         {
             name = femaleNames.get(rand.nextInt(femaleNames.size())) + " ";
         }

@@ -60,6 +60,7 @@ public class Config
             loadScreen(Parser.getLastElement(root, "screen"));
             loadClock(Parser.getLastElement(root, "clock"));
             loadNames(Parser.getLastElement(root, "names"));
+            loadRecipes(Parser.getLastElement(root, "recipes"));
         }
     }
     
@@ -153,6 +154,45 @@ public class Config
                     NameGenerator.addLastNameVerb(name);
                 }
             }
+        }
+    }
+    
+    private static void loadRecipes(Element recipes)
+    {
+        if (recipes == null)
+        {
+            return;
+        }
+        
+        NodeList nodes = recipes.getElementsByTagName("recipe");
+        Element element;
+        
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            element = (Element)(nodes.item(i));
+            loadRecipe(element);
+        }
+    }
+    
+    private static void loadRecipe(Element recipe)
+    {
+        int entity, state;
+        
+        Element result = Parser.getLastElement(recipe, "result");
+        entity = Integer.parseInt(result.getAttribute("entity"));
+        state = Integer.parseInt(result.getAttribute("state"));
+        //Entity result = new Entity(entity, state);
+        
+        Element ingredients = Parser.getLastElement(recipe, "ingredients");
+        NodeList nodes = ingredients.getElementsByTagName("ingredient");
+        Element ingredient;
+        
+        for (int i = 0; i < nodes.getLength(); i++)
+        {
+            ingredient = (Element)(nodes.item(i));
+            entity = Integer.parseInt(ingredient.getAttribute("entity"));
+            state = Integer.parseInt(ingredient.getAttribute("state"));
+            //Entity ingredient = new Entity(entity, state);
         }
     }
 }

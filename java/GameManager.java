@@ -221,7 +221,6 @@ public class GameManager implements MenuListener, KeyListener, Updateable
         ingredients = new ArrayList<Entity>();
         ingredients.add(new StoneMill());
         ingredients.add(new Wheat(Wheat.State.RIPEWHEAT));
-        ingredients.add(new Wheat(Wheat.State.RIPEWHEAT));
         recipes.add(new Recipe(new WheatFlour(), ingredients));
         
         return recipes;

@@ -16,9 +16,11 @@ public class NewGnomeDialog extends Menu implements MenuListener
      * Constants
      */
     
-    private final static int MENU_SEX = 0;
-    private final static int MENU_NAME = 1;
-    private final static int MENU_GENERATE = 2;
+    private final static int MENU_GENDER = 1;
+    private final static int MENU_GENDER_MALE = 10;
+    private final static int MENU_GENDER_FEMALE = 11;
+    private final static int MENU_NAME = 2;
+    private final static int MENU_GENERATE = 3;
     private final static int MENU_STARTGAME = 30;
     
     /*
@@ -26,7 +28,7 @@ public class NewGnomeDialog extends Menu implements MenuListener
      */
     
     private Being gnome;
-    private SwitchableMenuItem sex;
+    private SwitchableMenuItem gender;
     private EditableMenuItem name;
     
     /*
@@ -39,14 +41,14 @@ public class NewGnomeDialog extends Menu implements MenuListener
         
         gnome = new Being();
         
-        sex = new SwitchableMenuItem(MENU_SEX,
-                                     "Sex: ",
-                                     true,
-                                     MenuItem.LeftAligned);
-        sex.add(new MenuItem(Sex.Male, "Male"));
-        sex.add(new MenuItem(Sex.Female, "Female"));
-        sex.addMenuListener(this);
-        add(sex);
+        gender = new SwitchableMenuItem(MENU_GENDER,
+                                        "Gender: ",
+                                        true,
+                                        MenuItem.LeftAligned);
+        gender.add(new MenuItem(MENU_GENDER_MALE, "Male"));
+        gender.add(new MenuItem(MENU_GENDER_FEMALE, "Female"));
+        gender.addMenuListener(this);
+        add(gender);
         
         name = new EditableMenuItem(MENU_NAME,
                                     "Name: ",
@@ -116,7 +118,14 @@ public class NewGnomeDialog extends Menu implements MenuListener
     
     public void handleSelection(MenuItem item)
     {
-        gnome.setSex(item.getID());
+        if (item.getID() == MENU_GENDER_MALE)
+        {
+            gnome.setGender(Being.Gender.MALE);
+        }
+        else
+        {
+            gnome.setGender(Being.Gender.FEMALE);
+        }
     }
     
     /*
@@ -130,7 +139,7 @@ public class NewGnomeDialog extends Menu implements MenuListener
         switch (selection.getID())
         {
             case MENU_GENERATE:
-                gnome.setName(NameGenerator.generateName(gnome.getSex()));
+                gnome.setName(NameGenerator.generateName(gnome.getGender()));
                 name.setText(gnome.getName());
                 break;
             case MENU_STARTGAME:
